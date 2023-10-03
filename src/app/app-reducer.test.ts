@@ -1,22 +1,22 @@
-import { appReducer, InitialStateType, setAppErrorAC, setAppStatusAC } from './app-reducer'
+import { appReducer, setAppErrorAC, setAppStatusAC } from './app-reducer'
 
-let startState: InitialStateType;
+let startState: { status: string; error: string; isInitialized: boolean; } | undefined;
 
 beforeEach(() => {
 	startState = {
-		error: null,
+		error: '',
 		status: 'idle',
 		isInitialized: false
 	}
 })
 
 test('correct error message should be set', () => {
-	const endState = appReducer(startState, setAppErrorAC('some error'))
+	const endState = appReducer(startState, setAppErrorAC({error:'some error'}))
 	expect(endState.error).toBe('some error');
 })
 
 test('correct status should be set', () => {
-	const endState = appReducer(startState, setAppStatusAC('loading'))
+	const endState = appReducer(startState, setAppStatusAC({status:'loading'}))
 	expect(endState.status).toBe('loading');
 })
 
