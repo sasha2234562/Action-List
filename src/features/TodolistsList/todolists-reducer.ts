@@ -16,26 +16,25 @@ const slice = createSlice({
             if (findIndex !== -1) {
                 state.splice(findIndex, 1)
             }
-            state.filter(tl => tl.id != action.payload.id)
         },
         addTodolistAC(state, action: PayloadAction<{ todolist: TodolistType }>) {
             state.unshift({...action.payload.todolist, filter: 'all', entityStatus: 'idle'})
         },
         changeTodolistTitleAC(state, action: PayloadAction<{ id: string, title: string }>) {
             const findIndex = state.findIndex(t => t.id === action.payload.id)
-            if (findIndex) {
+            if (findIndex !== -1) {
                 state[findIndex].title = action.payload.title
             }
         },
         changeTodolistFilterAC(state, action: PayloadAction<{ id: string, filter: FilterValuesType }>) {
             const findIndex = state.findIndex(t => t.id === action.payload.id)
-            if (findIndex) {
+            if (findIndex !== -1) {
                 state[findIndex].filter = action.payload.filter
             }
         },
         changeTodolistEntityStatusAC(state, action: PayloadAction<{ id: string, status: RequestStatusType }>) {
             const findIndex = state.findIndex(t => t.id === action.payload.id)
-            if (findIndex) {
+            if (findIndex !== -1) {
                 state[findIndex].entityStatus = action.payload.status
             }
         },
