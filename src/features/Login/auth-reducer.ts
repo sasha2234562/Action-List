@@ -20,13 +20,13 @@ const slice = createSlice({
 export const loginTC =
   (data: LoginParamsType): AppThunk =>
     (dispatch) => {
-      dispatch(appActions.setAppStatus({ status:"loading" }));
+      dispatch(appActions.setAppStatus({ status: "loading" }));
       authAPI
         .login(data)
         .then((res) => {
           if (res.data.resultCode === 0) {
-            dispatch(authActions.setIsLoggedIn({isLoggedIn: true }));
-            dispatch(appActions.setAppStatus({status: "succeeded" }));
+            dispatch(authActions.setIsLoggedIn({ isLoggedIn: true }));
+            dispatch(appActions.setAppStatus({ status: "succeeded" }));
           } else {
             handleServerAppError(res.data, dispatch);
           }
@@ -37,13 +37,13 @@ export const loginTC =
     };
 export const logoutTC =
   (): AppThunk => (dispatch) => {
-    dispatch(appActions.setAppStatus({ status:"loading" }));
+    dispatch(appActions.setAppStatus({ status: "loading" }));
     authAPI
       .logout()
       .then((res) => {
         if (res.data.resultCode === 0) {
-          dispatch(authActions.setIsLoggedIn({isLoggedIn: false }));
-          dispatch(appActions.setAppStatus({status: "succeeded" }));
+          dispatch(authActions.setIsLoggedIn({ isLoggedIn: false }));
+          dispatch(appActions.setAppStatus({ status: "succeeded" }));
         } else {
           handleServerAppError(res.data, dispatch);
         }
@@ -54,4 +54,4 @@ export const logoutTC =
   };
 
 export const authReducer = slice.reducer;
-export const authActions  =slice.actions
+export const authActions = slice.actions;

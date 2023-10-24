@@ -11,7 +11,7 @@ export const appSlice = createSlice({
     isInitialized: false
   },
   reducers: {
-    setAppError: (state, action: PayloadAction<{ error: null | string}>) => {
+    setAppError: (state, action: PayloadAction<{ error: null | string }>) => {
       state.error = action.payload.error;
     },
     setAppStatus: (state, action: PayloadAction<{ status: RequestStatusType }>) => {
@@ -25,11 +25,14 @@ export const appSlice = createSlice({
 
 export const appReducer = appSlice.reducer;
 export const appActions = appSlice.actions;
+
+
 export const initializeAppTC = () => (dispatch: Dispatch) => {
   authAPI.me().then((res) => {
     if (res.data.resultCode === 0) {
       dispatch(authActions.setIsLoggedIn({ isLoggedIn: true }));
     } else {
+
     }
 
     dispatch(appActions.setAppInitialized({ isInitialized: true }));
