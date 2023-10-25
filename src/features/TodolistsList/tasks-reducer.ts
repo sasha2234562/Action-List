@@ -1,16 +1,9 @@
-import {
-  TaskPriorities,
-  TaskStatuses,
-  TaskType,
-  todolistsAPI,
-  UpdateTaskModelType
-} from "api/todolists-api";
-import { Dispatch } from "redux";
+import { TaskPriorities, TaskStatuses, TaskType, todolistsAPI, UpdateTaskModelType } from "api/todolists-api";
 import { AppRootStateType, AppThunk } from "app/store";
 import { handleServerAppError, handleServerNetworkError } from "utils/error-utils";
 import { appActions } from "app/app-reducer";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { actionsTodolists, TodolistDomainType } from "features/TodolistsList/todolists-reducer";
+import { actionsTodolists } from "features/TodolistsList/todolists-reducer";
 
 const sliceTasks = createSlice({
   name: "tasks",
@@ -36,6 +29,9 @@ const sliceTasks = createSlice({
     },
     setTasks: (state, action: PayloadAction<{ tasks: Array<TaskType>, todolistId: string }>) => {
       return { ...state, [action.payload.todolistId]: action.payload.tasks };
+    },
+    clearTasks: (state)=> {
+      return {}
     }
   },
   extraReducers: (builder) => {

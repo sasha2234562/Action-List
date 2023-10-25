@@ -3,6 +3,8 @@ import { handleServerAppError, handleServerNetworkError } from "utils/error-util
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AppThunk } from "app/store";
 import { appActions } from "app/app-reducer";
+import { actionsTodolists } from "features/TodolistsList/todolists-reducer";
+import { actionsTasks } from "features/TodolistsList/tasks-reducer";
 
 
 const slice = createSlice({
@@ -42,6 +44,8 @@ export const logoutTC =
       .logout()
       .then((res) => {
         if (res.data.resultCode === 0) {
+          dispatch(actionsTodolists.setTodolists({todolists: []}))
+          dispatch(actionsTasks.clearTasks())
           dispatch(authActions.setIsLoggedIn({ isLoggedIn: false }));
           dispatch(appActions.setAppStatus({ status: "succeeded" }));
         } else {
