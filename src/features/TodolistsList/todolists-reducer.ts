@@ -7,6 +7,7 @@ import {
 import { handleServerNetworkError } from "utils/error-utils";
 import { AppThunk } from "app/store";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { fetchTasksTC } from "features/TodolistsList/tasks-reducer";
 
 const sliceTodolists = createSlice({
   name: "todolists",
@@ -49,6 +50,12 @@ export const fetchTodolistsTC = (): AppThunk => {
       .then((res) => {
         dispatch(actionsTodolists.setTodolists({ todolists: res.data }));
         dispatch(appActions.setAppStatus({ status: "succeeded" }));
+        return res;
+      })
+      .then((todo) => {
+        todo.data.forEach(t => {
+          dispatch(fetchTasksTC(t.id));
+        });
       })
       .catch((error) => {
         handleServerNetworkError(error, dispatch);
