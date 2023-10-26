@@ -4,6 +4,7 @@ import { handleServerAppError, handleServerNetworkError } from "utils/error-util
 import { appActions } from "app/app-reducer";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { actionsTodolists } from "features/TodolistsList/todolists-reducer";
+import { clearTasksAndTodolists } from "common/actions/common-actions";
 
 const sliceTasks = createSlice({
   name: "tasks",
@@ -29,12 +30,9 @@ const sliceTasks = createSlice({
     },
     setTasks: (state, action: PayloadAction<{ tasks: Array<TaskType>, todolistId: string }>) => {
       return { ...state, [action.payload.todolistId]: action.payload.tasks };
-    },
-    clearTasks: (state)=> {
-      return {}
     }
   },
-  extraReducers: (builder) => {
+  extraReducers: builder => {
     builder.addCase(actionsTodolists.addTodolist, (state, action) => {
       state[action.payload.todolist.id] = [];
     })
@@ -42,14 +40,17 @@ const sliceTasks = createSlice({
         delete state[action.payload.id];
       })
       .addCase(actionsTodolists.setTodolists, (state, action) => {
-        action.payload.todolists.forEach((tl) => {
+        action.payload.todolists.forEach((tl: { id: string }) => {
           state[tl.id] = [];
         });
+      })
+      .addCase(clearTasksAndTodolists.type, () => {
+        return {};
       });
   }
 });
 export const tasksReducer = sliceTasks.reducer;
-export const actionsTasks = sliceTasks.actions;
+export const { setTasks, removeTask, addTask, updateTask } = sliceTasks.actions;
 
 // thunks
 export const fetchTasksTC =
@@ -57,14 +58,14 @@ export const fetchTasksTC =
     dispatch(appActions.setAppStatus({ status: "loading" }));
     todolistsAPI.getTasks(todolistId).then((res) => {
       const tasks = res.data.items;
-      dispatch(actionsTasks.setTasks({ tasks, todolistId }));
+      dispatch(setTasks({ tasks, todolistId }));
       dispatch(appActions.setAppStatus({ status: "succeeded" }));
     });
   };
 export const removeTaskTC =
   (taskId: string, todolistId: string): AppThunk => (dispatch) => {
     todolistsAPI.deleteTask(todolistId, taskId).then(() => {
-      dispatch(actionsTasks.removeTask({ taskId, todolistId }));
+      dispatch(removeTask({ taskId, todolistId }));
     });
   };
 export const addTaskTC =
@@ -76,7 +77,7 @@ export const addTaskTC =
         .then((res) => {
           if (res.data.resultCode === 0) {
             const task = res.data.data.item;
-            dispatch(actionsTasks.addTask({ task }));
+            dispatch(addTask({ task }));
             dispatch(appActions.setAppStatus({ status: "succeeded" }));
           } else {
             handleServerAppError(res.data, dispatch);
@@ -111,7 +112,7 @@ export const updateTaskTC =
         .updateTask(todolistId, taskId, apiModel)
         .then((res) => {
           if (res.data.resultCode === 0) {
-            dispatch(actionsTasks.updateTask({ taskId, model: domainModel, todolistId }));
+            dispatch(updateTask({ taskId, model: domainModel, todolistId }));
           } else {
             handleServerAppError(res.data, dispatch);
           }
