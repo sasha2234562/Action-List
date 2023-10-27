@@ -44,7 +44,7 @@ export const logOutTC =
       .logout()
       .then((res) => {
         if (res.data.resultCode === 0) {
-          dispatch(clearTasksAndTodolists())
+          dispatch(clearTasksAndTodolists({todolist: [], tasks: {}}))
           dispatch(authActions.setIsLoggedIn({ isLoggedIn: false }));
           dispatch(appActions.setAppStatus({ status: "succeeded" }));
         } else {
