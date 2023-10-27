@@ -6,7 +6,7 @@ import { appActions } from "app/app-reducer";
 import { clearTasksAndTodolists } from "common/actions/common-actions";
 import { AxiosError } from "axios";
 
-export const loginTC = createAsyncThunk<{isLoggedIn: boolean}, LoginParamsType>("login", async (data: LoginParamsType, thunkAPI) => {
+export const loginTC = createAsyncThunk<{isLoggedIn: boolean}, LoginParamsType>("login", async (data, thunkAPI) => {
   thunkAPI.dispatch(appActions.setAppStatus({ status: "loading" }));
   try {
     const res = await authAPI.login(data);
@@ -35,8 +35,8 @@ const slice = createSlice({
       state.isLoggedIn = action.payload.isLoggedIn;
     }
   },
-  extraReducers: bilder => {
-    bilder.addCase(loginTC.fulfilled, (state, action) => {
+  extraReducers: builder => {
+    builder.addCase(loginTC.fulfilled, (state, action) => {
       state.isLoggedIn = action.payload.isLoggedIn;
     });
   }

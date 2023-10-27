@@ -46,11 +46,15 @@ export const Login = () => {
       password: "",
       rememberMe: false
     },
-    // @ts-ignore
-    onSubmit: async (values: FormValuesType, formikHelpers: FormikHandlers<FormValuesType>) => {
-     const res = await dispatch(loginTC(values));
+    onSubmit: async (values: FormValuesType, formikHelpers) => {
+      const res = await dispatch(loginTC(values));
+      if (loginTC.rejected.match(res)) {
+        if (res.payload){
+          formikHelpers.setFieldError("email", "fake");
+        }
+      }
 
-     formikHelpers.setFieldError('email', 'fake')
+      formikHelpers.setFieldError("email", "fake");
     }
   });
 

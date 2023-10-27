@@ -1,11 +1,10 @@
-import { tasksReducer } from "features/TodolistsList/tasks-reducer"
-import { todolistsReducer } from "features/TodolistsList/todolists-reducer"
-import { AnyAction, combineReducers } from "redux"
-import { ThunkAction, ThunkDispatch } from "redux-thunk"
-import { appReducer } from "./app-reducer"
-import { authReducer } from "features/Login/auth-reducer"
-import { configureStore } from "@reduxjs/toolkit"
-import { useDispatch } from "react-redux";
+import { tasksReducer } from "features/TodolistsList/tasks-reducer";
+import { todolistsReducer } from "features/TodolistsList/todolists-reducer";
+import { AnyAction, combineReducers } from "redux";
+import { ThunkAction, ThunkDispatch } from "redux-thunk";
+import { appReducer } from "./app-reducer";
+import { authReducer } from "features/Login/auth-reducer";
+import { configureStore } from "@reduxjs/toolkit";
 
 // объединяя reducer-ы с помощью combineReducers,
 // мы задаём структуру нашего единственного объекта-состояния
