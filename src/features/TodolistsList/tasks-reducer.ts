@@ -13,21 +13,43 @@ export const fetchTasksTC = createAsyncThunk("tasks/fetchTasks", async (todolist
   thunkAPI.dispatch(appActions.setAppStatus({ status: "succeeded" }));
   return { tasks, todolistId };
 });
-export const removeTaskTC = createAsyncThunk("tasks/removeTask", async (param: {
+export const removeTaskTC = createAsyncThunk("tasks/removeTask", async (arg: {
   taskId: string,
   todolistId: string
 }) => {
-  const res = await todolistsAPI.deleteTask(param.todolistId, param.taskId);
-  return { taskId: param.taskId, todolistId: param.todolistId };
+  const res = await todolistsAPI.deleteTask(arg.todolistId, arg.taskId);
+  return { taskId: arg.taskId, todolistId: arg.todolistId };
 });
 
+export const addTaskTC = createAsyncThunk("task/addTask", async (arg: {
+  title: string,
+  todolistId: string
+}, thunkAPI) => {
+  thunkAPI.dispatch(appActions.setAppStatus({ status: "loading" }));
+  try {
+    const res = await todolistsAPI.createTask(arg.todolistId, arg.title);
+    if (res.data.resultCode === 0) {
+      const task = res.data.data.item;
+      thunkAPI.dispatch(appActions.setAppStatus({ status: "succeeded" }));
+      return { task };
+    } else {
+      handleServerAppError(res.data, thunkAPI.dispatch);
+      return thunkAPI.rejectWithValue("error");
+    }
+  } catch (e) {
+    handleServerNetworkError(e, thunkAPI.dispatch);
+    return thunkAPI.rejectWithValue("error");
+  }
+});
+
+
+//slice
 const sliceTasks = createSlice({
   name: "tasks",
   initialState: {} as TasksStateType,
   reducers: {
     addTask: (state, action: PayloadAction<{ task: TaskType }>) => {
-      const tasksForTodolist = state[action.payload.task.todoListId];
-      tasksForTodolist.unshift(action.payload.task);
+
     },
     updateTask: (state, action: PayloadAction<{
       taskId: string,
@@ -42,54 +64,39 @@ const sliceTasks = createSlice({
   extraReducers: builder => {
     builder.addCase(actionsTodolists.addTodolist, (state, action) => {
       state[action.payload.todolist.id] = [];
-    })
-      .addCase(removeTodolistTC.fulfilled, (state, action) => {
-        if(action.payload) delete state[action.payload.todolistId];
-      })
-      .addCase(fetchTodolistsTC.fulfilled, (state, action) => {
-        if(action.payload) {
-          action.payload.todolists.forEach((tl: { id: string }) => {
-            state[tl.id] = [];
-          });
-        }
-      })
-      .addCase(clearTasksAndTodolists, (state, action) => {
-        return action.payload.tasks;
-      })
-      .addCase(fetchTasksTC.fulfilled, (state, action) => {
-        return { ...state, [action.payload.todolistId]: action.payload.tasks };
-      })
-      .addCase(removeTaskTC.fulfilled, (state, action)=> {
-        const tasksForTodolist = state[action.payload.todolistId];
-        const index = tasksForTodolist.findIndex((task) => task.id === action.payload.taskId);
-        if (index !== -1) tasksForTodolist.splice(index, 1);
-      })
+    });
+    builder.addCase(removeTodolistTC.fulfilled, (state, action) => {
+      if (action.payload) delete state[action.payload.todolistId];
+    });
+    builder.addCase(fetchTodolistsTC.fulfilled, (state, action) => {
+      if (action.payload) {
+        action.payload.todolists.forEach((tl: { id: string }) => {
+          state[tl.id] = [];
+        });
+      }
+    });
+    builder.addCase(clearTasksAndTodolists, (state, action) => {
+      return action.payload.tasks;
+    });
+    builder.addCase(fetchTasksTC.fulfilled, (state, action) => {
+      return { ...state, [action.payload.todolistId]: action.payload.tasks };
+    });
+    builder.addCase(removeTaskTC.fulfilled, (state, action) => {
+      const tasksForTodolist = state[action.payload.todolistId];
+      const index = tasksForTodolist.findIndex((task) => task.id === action.payload.taskId);
+      if (index !== -1) tasksForTodolist.splice(index, 1);
+    });
+    builder.addCase(addTaskTC.fulfilled, (state, action) => {
+      const tasksForTodolist = state[action.payload.task.todoListId];
+      tasksForTodolist.unshift(action.payload.task);
+    });
   }
 });
 export const tasksReducer = sliceTasks.reducer;
-export const { addTask, updateTask } = sliceTasks.actions;
+export const { updateTask } = sliceTasks.actions;
 
 // thunks
 
-export const addTaskTC =
-  (title: string, todolistId: string): AppThunk =>
-    (dispatch) => {
-      dispatch(appActions.setAppStatus({ status: "loading" }));
-      todolistsAPI
-        .createTask(todolistId, title)
-        .then((res) => {
-          if (res.data.resultCode === 0) {
-            const task = res.data.data.item;
-            dispatch(addTask({ task }));
-            dispatch(appActions.setAppStatus({ status: "succeeded" }));
-          } else {
-            handleServerAppError(res.data, dispatch);
-          }
-        })
-        .catch((error) => {
-          handleServerNetworkError(error, dispatch);
-        });
-    };
 export const updateTaskTC =
   (taskId: string, domainModel: UpdateDomainTaskModelType, todolistId: string): AppThunk =>
     (dispatch, getState: () => AppRootStateType) => {
