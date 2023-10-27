@@ -1,10 +1,10 @@
-import React from "react"
-import { useFormik } from "formik"
-import { useSelector } from "react-redux"
-import { loginTC } from "./auth-reducer"
-import { AppRootStateType } from "app/store"
-import { Navigate } from "react-router-dom"
-import { useAppDispatch } from "hooks/useAppDispatch"
+import React from "react";
+import { FormikHandlers, useFormik } from "formik";
+import { useSelector } from "react-redux";
+import { loginTC } from "./auth-reducer";
+import { AppRootStateType } from "app/store";
+import { Navigate } from "react-router-dom";
+import { useAppDispatch } from "hooks/useAppDispatch";
 import {
   Button,
   Checkbox,
@@ -13,39 +13,49 @@ import {
   FormGroup,
   FormLabel,
   Grid,
-  TextField,
-} from "@mui/material"
+  TextField
+} from "@mui/material";
+
+type FormValuesType = {
+  email: string
+  password: string
+  rememberMe: boolean
+}
 
 export const Login = () => {
-  const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch();
 
-  const isLoggedIn = useSelector<AppRootStateType, boolean>((state) => state.auth.isLoggedIn)
+  const isLoggedIn = useSelector<AppRootStateType, boolean>((state) => state.auth.isLoggedIn);
+
 
   const formik = useFormik({
     validate: (values) => {
       if (!values.email) {
         return {
-          email: "Email is required",
-        }
+          email: "Email is required"
+        };
       }
       if (!values.password) {
         return {
-          password: "Password is required",
-        }
+          password: "Password is required"
+        };
       }
     },
     initialValues: {
       email: "",
       password: "",
-      rememberMe: false,
+      rememberMe: false
     },
-    onSubmit: (values) => {
-      dispatch(loginTC(values))
-    },
-  })
+    // @ts-ignore
+    onSubmit: async (values: FormValuesType, formikHelpers: FormikHandlers<FormValuesType>) => {
+     const res = await dispatch(loginTC(values));
+
+     formikHelpers.setFieldError('email', 'fake')
+    }
+  });
 
   if (isLoggedIn) {
-    return <Navigate to={"/"} />
+    return <Navigate to={"/"} />;
   }
   return (
     <Grid container justifyContent="center">
@@ -90,5 +100,5 @@ export const Login = () => {
         </form>
       </Grid>
     </Grid>
-  )
-}
+  );
+};

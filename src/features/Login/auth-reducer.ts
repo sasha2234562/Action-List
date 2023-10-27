@@ -4,8 +4,9 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AppThunk } from "app/store";
 import { appActions } from "app/app-reducer";
 import { clearTasksAndTodolists } from "common/actions/common-actions";
+import { AxiosError } from "axios";
 
-export const loginTC = createAsyncThunk("login", async (data: LoginParamsType, thunkAPI) => {
+export const loginTC = createAsyncThunk<{isLoggedIn: boolean}, LoginParamsType>("login", async (data: LoginParamsType, thunkAPI) => {
   thunkAPI.dispatch(appActions.setAppStatus({ status: "loading" }));
   try {
     const res = await authAPI.login(data);
@@ -14,30 +15,15 @@ export const loginTC = createAsyncThunk("login", async (data: LoginParamsType, t
       return { isLoggedIn: true };
     } else {
       handleServerAppError(res.data, thunkAPI.dispatch);
+      return thunkAPI.rejectWithValue({ errors: res.data.messages, fieldsErrors: res.data.fieldErrors });
     }
-  } catch (error) {
+  } catch (err) {
+    // @ts-ignore
+    const error : AxiosError = err
     handleServerNetworkError(error, thunkAPI.dispatch);
+    return thunkAPI.rejectWithValue({ errors: error, fieldsErrors: undefined });
   }
 });
-
-export const loginTC_ =
-  (data: LoginParamsType): AppThunk =>
-    (dispatch) => {
-      dispatch(appActions.setAppStatus({ status: "loading" }));
-      authAPI
-        .login(data)
-        .then((res) => {
-          if (res.data.resultCode === 0) {
-            dispatch(authActions.setIsLoggedIn({ isLoggedIn: true }));
-            dispatch(appActions.setAppStatus({ status: "succeeded" }));
-          } else {
-            handleServerAppError(res.data, dispatch);
-          }
-        })
-        .catch((error) => {
-          handleServerNetworkError(error, dispatch);
-        });
-    };
 
 const slice = createSlice({
   name: "auth",
@@ -51,9 +37,7 @@ const slice = createSlice({
   },
   extraReducers: bilder => {
     bilder.addCase(loginTC.fulfilled, (state, action) => {
-      if (action.payload) {
-        state.isLoggedIn = action.payload.isLoggedIn;
-      }
+      state.isLoggedIn = action.payload.isLoggedIn;
     });
   }
 });
