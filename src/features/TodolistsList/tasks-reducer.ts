@@ -13,7 +13,6 @@ export const fetchTasksTC = createAsyncThunk("tasks/fetchTasks", async (todolist
   thunkAPI.dispatch(appActions.setAppStatus({ status: "succeeded" }));
   return { tasks, todolistId };
 });
-
 export const removeTaskTC = createAsyncThunk("tasks/removeTask", async (param: {
   taskId: string,
   todolistId: string
