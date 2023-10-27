@@ -5,8 +5,10 @@ import { AppThunk } from "app/store";
 import { appActions } from "app/app-reducer";
 import { clearTasksAndTodolists } from "common/actions/common-actions";
 import { AxiosError } from "axios";
+import { actionsTodolists } from "features/TodolistsList/todolists-reducer";
 
-export const loginTC = createAsyncThunk<{isLoggedIn: boolean}, LoginParamsType>("login", async (data, thunkAPI) => {
+// thunks
+export const loginTC = createAsyncThunk<{ isLoggedIn: boolean }, LoginParamsType>("login", async (data, thunkAPI) => {
   thunkAPI.dispatch(appActions.setAppStatus({ status: "loading" }));
   try {
     const res = await authAPI.login(data);
@@ -19,9 +21,25 @@ export const loginTC = createAsyncThunk<{isLoggedIn: boolean}, LoginParamsType>(
     }
   } catch (err) {
     // @ts-ignore
-    const error : AxiosError = err
+    const error: AxiosError = err;
     handleServerNetworkError(error, thunkAPI.dispatch);
     return thunkAPI.rejectWithValue({ errors: error, fieldsErrors: undefined });
+  }
+});
+
+export const logoutTC = createAsyncThunk("auth/logout", async (arg, thunkAPI) => {
+  try {
+    thunkAPI.dispatch(appActions.setAppStatus({ status: "loading" }));
+    const res = await authAPI.logout();
+    if (res.data.resultCode === 0) {
+      thunkAPI.dispatch(clearTasksAndTodolists({ todolist: [], tasks: {} }));
+      thunkAPI.dispatch(appActions.setAppStatus({ status: "succeeded" }));
+      return { isLoggedIn: false };
+    } else {
+      handleServerAppError(res.data, thunkAPI.dispatch);
+    }
+  } catch (e) {
+    handleServerNetworkError(e, thunkAPI.dispatch);
   }
 });
 
@@ -32,34 +50,20 @@ const slice = createSlice({
   },
   reducers: {
     setIsLoggedIn: (state, action: PayloadAction<{ isLoggedIn: boolean }>) => {
-      state.isLoggedIn = action.payload.isLoggedIn;
+      // state.isLoggedIn = action.payload.isLoggedIn;
     }
   },
   extraReducers: builder => {
     builder.addCase(loginTC.fulfilled, (state, action) => {
       state.isLoggedIn = action.payload.isLoggedIn;
     });
+    builder.addCase(logoutTC.fulfilled, (state, action) => {
+      if (action.payload) state.isLoggedIn = action.payload.isLoggedIn;
+    });
+
   }
 });
-// thunks
-export const logOutTC =
-  (): AppThunk => (dispatch) => {
-    dispatch(appActions.setAppStatus({ status: "loading" }));
-    authAPI
-      .logout()
-      .then((res) => {
-        if (res.data.resultCode === 0) {
-          dispatch(clearTasksAndTodolists({ todolist: [], tasks: {} }));
-          dispatch(authActions.setIsLoggedIn({ isLoggedIn: false }));
-          dispatch(appActions.setAppStatus({ status: "succeeded" }));
-        } else {
-          handleServerAppError(res.data, dispatch);
-        }
-      })
-      .catch((error) => {
-        handleServerNetworkError(error, dispatch);
-      });
-  };
+
 
 export const authReducer = slice.reducer;
 export const authActions = slice.actions;

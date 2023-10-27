@@ -1,5 +1,5 @@
 import { TaskPriorities, TaskStatuses } from "api/todolists-api";
-import { actionsTodolists, fetchTodolistsTC } from "features/TodolistsList/todolists-reducer";
+import { actionsTodolists, fetchTodolistsTC, removeTodolistTC } from "features/TodolistsList/todolists-reducer";
 import {
   addTask,
   fetchTasksTC,
@@ -115,16 +115,17 @@ test("new array should be added when new todolist is added", () => {
   expect(keys.length).toBe(3);
   expect(endState[newKey]).toEqual([]);
 });
-test("propertry with todolistId should be deleted", () => {
-  const action = actionsTodolists.removeTodolist({ id: "todolistId2" });
+test("propertry with todolistId should be deleted",
+  () => {
+    const action = removeTodolistTC.fulfilled({ todolistId: "todolistId2" }, "", "");
 
-  const endState = tasksReducer(startState, action);
+    const endState = tasksReducer(startState, action);
 
-  const keys = Object.keys(endState);
+    const keys = Object.keys(endState);
 
-  expect(keys.length).toBe(1);
-  expect(endState["todolistId2"]).not.toBeDefined();
-});
+    expect(keys.length).toBe(1);
+    expect(endState["todolistId2"]).not.toBeDefined();
+  });
 
 test("empty arrays should be added when we set todolists", () => {
   const action = fetchTodolistsTC.fulfilled({

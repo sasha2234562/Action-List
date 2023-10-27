@@ -7,7 +7,7 @@ import { AppRootStateType } from "./store"
 import { initializeAppTC, RequestStatusType } from "./app-reducer"
 import { BrowserRouter, Route, Routes } from "react-router-dom"
 import { Login } from "features/Login/Login"
-import { logOutTC } from "features/Login/auth-reducer"
+import { logoutTC } from "features/Login/auth-reducer"
 import {
   AppBar,
   Button,
@@ -35,7 +35,7 @@ function App({ demo = false }: PropsType) {
   }, [])
 
   const logoutHandler = useCallback(() => {
-    dispatch(logOutTC())
+    dispatch(logoutTC())
   }, [])
 
   if (!isInitialized) {
