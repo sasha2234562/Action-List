@@ -3,7 +3,7 @@ import { AppRootStateType, AppThunk } from "app/store";
 import { handleServerAppError, handleServerNetworkError } from "utils/error-utils";
 import { appActions } from "app/app-reducer";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { actionsTodolists } from "features/TodolistsList/todolists-reducer";
+import { actionsTodolists, fetchTodolistsTC } from "features/TodolistsList/todolists-reducer";
 import { clearTasksAndTodolists } from "common/actions/common-actions";
 
 export const fetchTasksTC = createAsyncThunk("tasks/fetchTasks", async (todolistId: string, thunkAPI) => {
@@ -46,10 +46,12 @@ const sliceTasks = createSlice({
       .addCase(actionsTodolists.removeTodolist, (state, action) => {
         delete state[action.payload.id];
       })
-      .addCase(actionsTodolists.setTodolists, (state, action) => {
-        action.payload.todolists.forEach((tl: { id: string }) => {
-          state[tl.id] = [];
-        });
+      .addCase(fetchTodolistsTC.fulfilled, (state, action) => {
+        if(action.payload) {
+          action.payload.todolists.forEach((tl: { id: string }) => {
+            state[tl.id] = [];
+          });
+        }
       })
       .addCase(clearTasksAndTodolists, (state, action) => {
         return action.payload.tasks;
