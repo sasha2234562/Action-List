@@ -33,7 +33,6 @@ export const removeTodolistTC = createAsyncThunk("todolists/removeTodolist", asy
     const res = await todolistsAPI.deleteTodolist(todolistId);
     //скажем глобально приложению, что асинхронная операция завершена
     thunkAPI.dispatch(appActions.setAppStatus({ status: "succeeded" }));
-    debugger
     if(res.data.resultCode === 0)  return { todolistId };
   } catch (error) {
 
