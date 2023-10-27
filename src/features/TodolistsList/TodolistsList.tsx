@@ -38,8 +38,8 @@ export const TodolistsList: React.FC<PropsType> = ({ demo = false }) => {
     dispatch(fetchTodolistsTC());
   }, []);
 
-  const removeTask = useCallback(function(id: string, todolistId: string) {
-    dispatch(removeTaskTC(id, todolistId));
+  const removeTask = useCallback(function(taskId: string, todolistId: string) {
+    dispatch(removeTaskTC({ taskId, todolistId }));
   }, []);
 
   const addTask = useCallback(function(title: string, todolistId: string) {
