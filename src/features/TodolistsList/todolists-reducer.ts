@@ -1,11 +1,6 @@
 import { todolistsAPI, TodolistType } from "api/todolists-api";
-import { Dispatch } from "redux";
-import {
-  appActions,
-  RequestStatusType
-} from "app/app-reducer";
+import { appActions, RequestStatusType } from "app/app-reducer";
 import { handleServerNetworkError } from "utils/error-utils";
-import { AppThunk } from "app/store";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { fetchTasksTC } from "features/TodolistsList/tasks-reducer";
 import { clearTasksAndTodolists } from "common/actions/common-actions";
@@ -20,8 +15,8 @@ export const fetchTodolistsTC = createAsyncThunk("todolists/fetchTodolists", asy
       thunkAPI.dispatch(fetchTasksTC(t.id));
     });
     return { todolists: res.data };
-  } catch (error) {
-    handleServerNetworkError(error, thunkAPI.dispatch);
+  } catch (e) {
+    handleServerNetworkError(e, thunkAPI.dispatch);
   }
 });
 export const removeTodolistTC = createAsyncThunk("todolists/removeTodolist", async (todolistId: string, thunkAPI) => {
@@ -34,27 +29,43 @@ export const removeTodolistTC = createAsyncThunk("todolists/removeTodolist", asy
     //скажем глобально приложению, что асинхронная операция завершена
     thunkAPI.dispatch(appActions.setAppStatus({ status: "succeeded" }));
     if (res.data.resultCode === 0) return { todolistId };
-  } catch (error) {
-    return thunkAPI.rejectWithValue(error);
+  } catch (e) {
+    return thunkAPI.rejectWithValue(e);
   }
 });
 
-export const addTodolistTC = createAsyncThunk('todolist/addTodolist',async (title: string, {dispatch})=> {
+export const addTodolistTC = createAsyncThunk("todolist/addTodolist", async (title: string, {
+  dispatch,
+  rejectWithValue
+}) => {
   dispatch(appActions.setAppStatus({ status: "loading" }));
-  const res = await todolistsAPI.createTodolist(title)
+  try {
+    const res = await todolistsAPI.createTodolist(title);
     dispatch(appActions.setAppStatus({ status: "succeeded" }));
-  return { todolist: res.data.data.item }
-})
+    return { todolist: res.data.data.item };    
+  } catch (e) {
+    return rejectWithValue(e)
+  }
+
+});
+
+export const changeTodolistTitleTC = createAsyncThunk("todolist/changeTodolistTitle", async (arg: {
+  id: string,
+  title: string
+}, { rejectWithValue }) => {
+  try {
+    const res = await todolistsAPI.updateTodolist(arg.id, arg.title)
+    return { id:arg.id, title: arg.title }
+  } catch (e) {
+    return rejectWithValue(e)
+  }
+});
 
 //slice
 const sliceTodolists = createSlice({
   name: "todolists",
   initialState: [] as TodolistDomainType[],
   reducers: {
-    changeTodolistTitle: (state, action: PayloadAction<{ id: string, title: string }>) => {
-      const index = state.findIndex(todo => todo.id === action.payload.id);
-      if (index !== -1) state[index].title = action.payload.title;
-    },
     changeTodolistFilter: (state, action: PayloadAction<{ id: string, filter: FilterValuesType }>) => {
       const index = state.findIndex(todo => todo.id === action.payload.id);
       if (index !== -1) state[index].filter = action.payload.filter;
@@ -80,21 +91,16 @@ const sliceTodolists = createSlice({
     builder.addCase(addTodolistTC.fulfilled, (state, action) => {
       const newTodolist: TodolistDomainType = { ...action.payload.todolist, filter: "all", entityStatus: "idle" };
       state.unshift(newTodolist);
+    });
+    builder.addCase(changeTodolistTitleTC.fulfilled, (state, action)=> {
+      const index = state.findIndex(todo => todo.id === action.payload.id);
+      if (index !== -1) state[index].title = action.payload.title;
     })
   }
 });
 
 export const todolistsReducer = sliceTodolists.reducer;
 export const actionsTodolists = sliceTodolists.actions;
-// thunks
-export const changeTodolistTitleTC = (id: string, title: string) => {
-  return (dispatch: Dispatch) => {
-    todolistsAPI.updateTodolist(id, title).then((res) => {
-      dispatch(actionsTodolists.changeTodolistTitle({ id, title }));
-    });
-  };
-};
-
 // types
 
 export type FilterValuesType = "all" | "active" | "completed"
