@@ -1,5 +1,5 @@
 import {
-  actionsTodolists,
+  actionsTodolists, addTodolistTC,
   fetchTodolistsTC,
   FilterValuesType, removeTodolistTC,
   TodolistDomainType,
@@ -51,7 +51,7 @@ test("correct todolist should be added", () => {
     order: 0
   };
 
-  const endState = todolistsReducer(startState, actionsTodolists.addTodolist({ todolist }));
+  const endState = todolistsReducer(startState, addTodolistTC.fulfilled({ todolist }, 'requerdId', todolistId1));
 
   expect(endState.length).toBe(3);
   expect(endState[0].title).toBe(todolist.title);
