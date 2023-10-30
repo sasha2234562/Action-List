@@ -14,10 +14,10 @@ const rootReducer = combineReducers({
   tasks: tasksReducer,
   todolists: todolistsReducer,
   app: appReducer,
-  auth: authReducer,
-})
+  auth: authReducer
+});
 // непосредственно создаём store
-export const store = configureStore({ reducer: rootReducer })
+export const store = configureStore({ reducer: rootReducer });
 // определить автоматически тип всего объекта состояния
 export type AppRootStateType = ReturnType<typeof rootReducer>
 
@@ -33,13 +33,11 @@ export type AppDispatch = typeof store.dispatch
 
 // а это, чтобы можно было в консоли браузера обращаться к store в любой момент
 // @ts-ignore
-window.store = store
+window.store = store;
 
-export function useActions<T extends  ActionCreatorsMapObject<any>>(actions: T) {
-  const dispatch = useAppDispatch()
-
-  const boundActions = useMemo(()=> {
-    return bindActionCreators(actions, dispatch)
-  }, [])
-  return boundActions
+export function useActions<T extends ActionCreatorsMapObject<any>>(actions: T) {
+  const dispatch = useAppDispatch();
+  return useMemo(() => {
+    return bindActionCreators(actions, dispatch);
+  }, []);
 }

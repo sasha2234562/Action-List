@@ -28,18 +28,18 @@ type PropsType = {
 
 
 function App({ demo = false }: PropsType) {
-  const status = useSelector(selectors.selectStatus)
-  const isInitialized = useSelector(selectors.selectIsInitialized)
-  const isLoggedIn = useSelector(authSelectors.selectIsLoggedIn)
-  const dispatch = useAppDispatch()
+  const status = useSelector(selectors.selectStatus);
+  const isInitialized = useSelector(selectors.selectIsInitialized);
+  const isLoggedIn = useSelector(authSelectors.selectIsLoggedIn);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(initializeAppTC())
-  }, [])
+    dispatch(initializeAppTC());
+  }, []);
 
   const logoutHandler = useCallback(() => {
-    dispatch(logoutTC())
-  }, [])
+    dispatch(logoutTC());
+  }, []);
 
   if (!isInitialized) {
     return (
@@ -48,12 +48,12 @@ function App({ demo = false }: PropsType) {
           position: "fixed",
           top: "30%",
           textAlign: "center",
-          width: "100%",
+          width: "100%"
         }}
       >
         <CircularProgress />
       </div>
-    )
+    );
   }
 
   return (
@@ -82,7 +82,7 @@ function App({ demo = false }: PropsType) {
         </Container>
       </div>
     </BrowserRouter>
-  )
+  );
 }
 
-export default App
+export default App;

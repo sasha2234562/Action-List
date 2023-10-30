@@ -1,40 +1,40 @@
-import React, { ChangeEvent, useCallback } from "react"
-import { Checkbox, IconButton } from "@mui/material"
-import { Delete } from "@mui/icons-material"
-import { EditableSpan } from "components/EditableSpan/EditableSpan"
-import { TaskStatuses, TaskType } from "api/todolists-api"
+import React, { ChangeEvent, useCallback } from "react";
+import { Checkbox, IconButton } from "@mui/material";
+import { Delete } from "@mui/icons-material";
+import { EditableSpan } from "components/EditableSpan/EditableSpan";
+import { TaskStatuses, TaskType } from "api/todolists-api";
 
 type TaskPropsType = {
   task: TaskType
   todolistId: string
-  changeTaskStatus: (id: string, status: TaskStatuses, todolistId: string) => void
-  changeTaskTitle: (taskId: string, newTitle: string, todolistId: string) => void
-  removeTask: (taskId: string, todolistId: string) => void
+  changeTaskStatus: (arg: { taskId: string, domainModel: { status: TaskStatuses }, todolistId: string }) => void
+  changeTaskTitle: (arg: { taskId: string, domainModel: { title: string }, todolistId: string }) => void
+  removeTask: (arg: { taskId: string, todolistId: string }) => void
 }
 export const Task = React.memo((props: TaskPropsType) => {
   const onClickHandler = useCallback(
-    () => props.removeTask(props.task.id, props.todolistId),
-    [props.task.id, props.todolistId],
-  )
+    () => props.removeTask({ taskId: props.task.id, todolistId: props.todolistId }),
+    [props.task.id, props.todolistId]
+  );
 
   const onChangeHandler = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
-      let newIsDoneValue = e.currentTarget.checked
-      props.changeTaskStatus(
-        props.task.id,
-        newIsDoneValue ? TaskStatuses.Completed : TaskStatuses.New,
-        props.todolistId,
-      )
+      let newIsDoneValue = e.currentTarget.checked ? TaskStatuses.Completed : TaskStatuses.New;
+      props.changeTaskStatus({
+        taskId: props.task.id,
+        domainModel: { status: newIsDoneValue },
+        todolistId: props.todolistId
+      });
     },
-    [props.task.id, props.todolistId],
-  )
+    [props.task.id, props.todolistId]
+  );
 
   const onTitleChangeHandler = useCallback(
     (newValue: string) => {
-      props.changeTaskTitle(props.task.id, newValue, props.todolistId)
+      props.changeTaskTitle({ taskId: props.task.id, domainModel: { title: newValue }, todolistId: props.todolistId });
     },
-    [props.task.id, props.todolistId],
-  )
+    [props.task.id, props.todolistId]
+  );
 
   return (
     <div
@@ -52,5 +52,5 @@ export const Task = React.memo((props: TaskPropsType) => {
         <Delete />
       </IconButton>
     </div>
-  )
-})
+  );
+});

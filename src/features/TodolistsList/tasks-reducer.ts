@@ -1,17 +1,8 @@
-import { TaskPriorities, TaskStatuses, TaskType, todolistsAPI, UpdateTaskModelType } from "api/todolists-api";
-import { AppRootStateType, AppThunk } from "app/store";
-import { handleServerAppError, handleServerNetworkError } from "utils/error-utils";
-import { appActions } from "app/app-reducer";
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import {
-  actionsTodolists,
-  addTodolistTC,
-  fetchTodolistsTC,
-  removeTodolistTC
-} from "features/TodolistsList/todolists-reducer";
+import { TaskPriorities, TaskStatuses, TaskType } from "api/todolists-api";
+import { createSlice } from "@reduxjs/toolkit";
 import { clearTasksAndTodolists } from "common/actions/common-actions";
 import { addTaskTC, fetchTasksTC, removeTaskTC, updateTaskTC } from "features/TodolistsList/tasks-actions";
-
+import { addTodolistTC, fetchTodolistsTC, removeTodolistTC } from "features/TodolistsList/actions-todolist";
 
 //slice
 const sliceTasks = createSlice({
