@@ -2,7 +2,7 @@ import React, { useCallback, useEffect } from "react";
 import "./App.css";
 import { TodolistsList } from "features/TodolistsList/TodolistsList";
 import { ErrorSnackbar } from "components/ErrorSnackbar/ErrorSnackbar";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { initializeAppTC } from "./app-reducer";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Login } from "features/Auth/Login";
@@ -20,6 +20,7 @@ import {
 import { Menu } from "@mui/icons-material";
 import { selectors } from "app/app.index";
 import { authSelectors } from "features/Auth/auth/auth.index";
+import { useAppDispatch } from "hooks/useAppDispatch";
 
 type PropsType = {
   demo?: boolean
@@ -30,7 +31,7 @@ function App({ demo = false }: PropsType) {
   const status = useSelector(selectors.selectStatus)
   const isInitialized = useSelector(selectors.selectIsInitialized)
   const isLoggedIn = useSelector(authSelectors.selectIsLoggedIn)
-  const dispatch = useDispatch<any>()
+  const dispatch = useAppDispatch()
 
   useEffect(() => {
     dispatch(initializeAppTC())
