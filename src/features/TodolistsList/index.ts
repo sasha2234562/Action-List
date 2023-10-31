@@ -6,29 +6,26 @@ import {
   fetchTodolistsTC,
   removeTodolistTC
 } from "features/TodolistsList/Todolist/todolist-actions";
+import { selectTasks, selectTodolists } from "features/TodolistsList/Todolist/selectors";
 
 const asyncActionsTask = {
   fetchTasksTC,
   removeTaskTC,
   addTaskTC,
   updateTaskTC
-}
+};
 const asyncActionsTodo = {
   fetchTodolistsTC,
   removeTodolistTC,
   addTodolistTC,
   changeTodolistTitleTC
-}
-const todolistActions = {
-  ...asyncActionsTodo,
-  ...sliceTodolists.actions
 };
-
-const tasksActions = {
- ...asyncActionsTask
-};
+const todolistActions = { ...asyncActionsTodo, ...sliceTodolists.actions };
+const tasksActions = { ...asyncActionsTask };
+const selectors = { selectTodolists, selectTasks };
 
 export {
   tasksActions,
-  todolistActions
+  todolistActions,
+  selectors
 };

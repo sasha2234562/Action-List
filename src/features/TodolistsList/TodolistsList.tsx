@@ -1,13 +1,12 @@
 import React, { useCallback, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { AppRootStateType, useActions } from "app/store";
-import { TodolistDomainType } from "features/TodolistsList/todolists-reducer";
 import { Grid, Paper } from "@mui/material";
 import { AddItemForm } from "components/AddItemForm/AddItemForm";
 import { Todolist } from "./Todolist/Todolist";
 import { Navigate } from "react-router-dom";
-import { TasksStateType } from "features/TodolistsList/tasks-reduser";
-import { todolistActions } from "features/TodolistsList/index";
+import { selectors, todolistActions } from "features/TodolistsList/index";
+import { sectorAuth } from "features/Auth";
 
 type PropsType = {
   demo?: boolean
@@ -15,10 +14,10 @@ type PropsType = {
 
 export const TodolistsList: React.FC<PropsType> = ({ demo = false }) => {
 
-  const todolists = useSelector<AppRootStateType, Array<TodolistDomainType>>((state) => state.todolists);
-  const tasks = useSelector<AppRootStateType, TasksStateType>((state) => state.tasks);
-  const isLoggedIn = useSelector<AppRootStateType, boolean>((state) => state.auth.isLoggedIn);
-  const { fetchTodolistsTC,  addTodolistTC } = useActions(todolistActions);
+  const todolists = useSelector(selectors.selectTodolists);
+  const tasks = useSelector(selectors.selectTasks);
+  const isLoggedIn = useSelector<AppRootStateType, boolean>(sectorAuth);
+  const { fetchTodolistsTC, addTodolistTC } = useActions(todolistActions);
 
   useEffect(() => {
     if (demo || !isLoggedIn) {

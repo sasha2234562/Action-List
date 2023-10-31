@@ -21,6 +21,7 @@ import { Menu } from "@mui/icons-material";
 import { selectors } from "app/app.index";
 import { authSelectors } from "features/Auth/auth/auth.index";
 import { useAppDispatch } from "hooks/useAppDispatch";
+import { useActions } from "app/store";
 
 type PropsType = {
   demo?: boolean
@@ -31,10 +32,11 @@ function App({ demo = false }: PropsType) {
   const status = useSelector(selectors.selectStatus);
   const isInitialized = useSelector(selectors.selectIsInitialized);
   const isLoggedIn = useSelector(authSelectors.selectIsLoggedIn);
+  const { initializeAppTC } = useActions(asyncActionsinitializeApp)
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(asyncActionsinitializeApp.initializeAppTC());
+    initializeAppTC();
   }, []);
 
   const logoutHandler = useCallback(() => {
