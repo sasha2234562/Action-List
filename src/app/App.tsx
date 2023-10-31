@@ -5,8 +5,8 @@ import { ErrorSnackbar } from "components/ErrorSnackbar/ErrorSnackbar";
 import { useSelector } from "react-redux";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Login } from "features/Auth/Login";
-import { asyncActionslog } from "features/Auth";
-import {asyncActionsinitializeApp} from "../app/index"
+import { actionsLogin } from "features/Auth";
+import { asyncActionsinitializeApp } from "../app/index";
 import {
   AppBar,
   Button,
@@ -19,8 +19,7 @@ import {
 } from "@mui/material";
 import { Menu } from "@mui/icons-material";
 import { selectors } from "app/app.index";
-import { authSelectors } from "features/Auth/auth/auth.index";
-import { useAppDispatch } from "hooks/useAppDispatch";
+import { sectorAuth } from "features/Auth";
 import { useActions } from "app/store";
 
 type PropsType = {
@@ -31,16 +30,16 @@ type PropsType = {
 function App({ demo = false }: PropsType) {
   const status = useSelector(selectors.selectStatus);
   const isInitialized = useSelector(selectors.selectIsInitialized);
-  const isLoggedIn = useSelector(authSelectors.selectIsLoggedIn);
+  const isLoggedIn = useSelector(sectorAuth);
   const { initializeAppTC } = useActions(asyncActionsinitializeApp)
-  const dispatch = useAppDispatch();
+  const{logoutTC} = useActions(actionsLogin)
 
   useEffect(() => {
     initializeAppTC();
   }, []);
 
   const logoutHandler = useCallback(() => {
-    dispatch(asyncActionslog.logoutTC());
+    logoutTC();
   }, []);
 
   if (!isInitialized) {

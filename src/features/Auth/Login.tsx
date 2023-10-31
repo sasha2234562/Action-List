@@ -1,11 +1,11 @@
 import React from "react";
 import { useFormik } from "formik";
 import { useSelector } from "react-redux";
-import { asyncActionslog } from "./index";
-import { AppRootStateType } from "app/store";
+import { actionsLogin, sectorAuth } from "./index";
 import { Navigate } from "react-router-dom";
 import { useAppDispatch } from "hooks/useAppDispatch";
 import { Button, Checkbox, FormControl, FormControlLabel, FormGroup, FormLabel, Grid, TextField } from "@mui/material";
+import { useActions } from "app/store";
 
 type FormValuesType = {
   email: string
@@ -16,7 +16,8 @@ type FormValuesType = {
 export const Login = () => {
   const dispatch = useAppDispatch();
 
-  const isLoggedIn = useSelector<AppRootStateType, boolean>((state) => state.auth.isLoggedIn);
+  const {loginTC} = useActions(actionsLogin);
+  const isLoggedIn = useSelector(sectorAuth)
 
 
   const formik = useFormik({
@@ -38,8 +39,8 @@ export const Login = () => {
       rememberMe: false
     },
     onSubmit: async (values: FormValuesType, formikHelpers) => {
-      const res = await dispatch(asyncActionslog.loginTC(values));
-      if (asyncActionslog.loginTC.rejected.match(res)) {
+      const res = await dispatch(actionsLogin.loginTC(values));
+      if (actionsLogin.loginTC.rejected.match(res)) {
         if (res.payload){
           formikHelpers.setFieldError("email", "fake");
         }

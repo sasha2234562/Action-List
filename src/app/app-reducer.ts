@@ -1,5 +1,5 @@
 import { authAPI } from "api/todolists-api";
-import { authActions } from "features/Auth/auth-reducer";
+import { actionsLogin } from "features/Auth";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 
@@ -8,7 +8,7 @@ const initializeAppTC = createAsyncThunk("app/initializeAppTC", async (arg, {dis
   try {
     const res = await authAPI.me();
     if (res.data.resultCode === 0) {
-      dispatch(authActions.setIsLoggedIn({ isLoggedIn: true }));
+      dispatch(actionsLogin.setIsLoggedIn({ isLoggedIn: true }));
     }
     return
   } catch (e) {
