@@ -6,7 +6,7 @@ import { clearTasksAndTodolists } from "common/actions/common-actions";
 import { AxiosError } from "axios";
 
 // thunks
-export const loginTC = createAsyncThunk<{ isLoggedIn: boolean }, LoginParamsType>("login", async (data, thunkAPI) => {
+const loginTC = createAsyncThunk<{ isLoggedIn: boolean }, LoginParamsType>("login", async (data, thunkAPI) => {
   thunkAPI.dispatch(appActions.setAppStatus({ status: "loading" }));
   try {
     const res = await authAPI.login(data);
@@ -25,7 +25,7 @@ export const loginTC = createAsyncThunk<{ isLoggedIn: boolean }, LoginParamsType
   }
 });
 
-export const logoutTC = createAsyncThunk("auth/logout", async (arg, thunkAPI) => {
+const logoutTC = createAsyncThunk("auth/logout", async (arg, thunkAPI) => {
   try {
     thunkAPI.dispatch(appActions.setAppStatus({ status: "loading" }));
     const res = await authAPI.logout();
@@ -43,6 +43,7 @@ export const logoutTC = createAsyncThunk("auth/logout", async (arg, thunkAPI) =>
   }
 });
 
+export const asyncActionslog = {loginTC, logoutTC}
 const slice = createSlice({
   name: "auth",
   initialState: {

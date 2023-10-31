@@ -6,8 +6,8 @@ import { Grid, Paper } from "@mui/material";
 import { AddItemForm } from "components/AddItemForm/AddItemForm";
 import { Todolist } from "./Todolist/Todolist";
 import { Navigate } from "react-router-dom";
-import { TasksStateType } from "features/TodolistsList/tasks-reducer";
-import { todolistActions } from "features/TodolistsList/actions-todolist";
+import { TasksStateType } from "features/TodolistsList/tasks-reduser";
+import { todolistActions } from "features/TodolistsList/index";
 
 type PropsType = {
   demo?: boolean

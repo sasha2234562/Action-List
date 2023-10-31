@@ -4,7 +4,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 
 //thunk
-export const initializeAppTC = createAsyncThunk("app/initializeAppTC", async (arg, {dispatch}) => {
+const initializeAppTC = createAsyncThunk("app/initializeAppTC", async (arg, {dispatch}) => {
   try {
     const res = await authAPI.me();
     if (res.data.resultCode === 0) {
@@ -16,6 +16,9 @@ export const initializeAppTC = createAsyncThunk("app/initializeAppTC", async (ar
   }
 });
 
+export const asyncActionsinitializeApp = {
+  initializeAppTC
+}
 //slice
 export const appSlice = createSlice({
   name: "app",

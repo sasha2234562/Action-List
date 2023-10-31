@@ -3,7 +3,7 @@ import { appActions } from "app/app-reducer";
 import { todolistsAPI, UpdateTaskModelType } from "api/todolists-api";
 import { handleServerAppError, handleServerNetworkError } from "utils/error-utils";
 import { AppRootStateType } from "app/store";
-import { UpdateDomainTaskModelType } from "features/TodolistsList/tasks-reducer";
+import { UpdateDomainTaskModelType } from "features/TodolistsList/tasks-reduser";
 
 export const fetchTasksTC = createAsyncThunk("tasks/fetchTasks", async (todolistId: string, thunkAPI) => {
   thunkAPI.dispatch(appActions.setAppStatus({ status: "loading" }));

@@ -7,7 +7,7 @@ import {
   changeTodolistTitleTC,
   fetchTodolistsTC,
   removeTodolistTC
-} from "features/TodolistsList/Todolist/actions-todolist";
+} from "features/TodolistsList/Todolist/todolist-actions";
 
 //slice
 export const sliceTodolists = createSlice({
