@@ -1,8 +1,8 @@
 import { TaskPriorities, TaskStatuses, TaskType } from "api/todolists-api";
 import { createSlice } from "@reduxjs/toolkit";
 import { clearTasksAndTodolists } from "common/actions/common-actions";
-import { addTaskTC, fetchTasksTC, removeTaskTC, updateTaskTC } from "features/TodolistsList/tasks-actions";
-import { addTodolistTC, fetchTodolistsTC, removeTodolistTC } from "features/TodolistsList/actions-todolist";
+import { addTodolistTC, fetchTodolistsTC, removeTodolistTC } from "features/TodolistsList/Todolist/actions-todolist";
+import { addTaskTC, fetchTasksTC, removeTaskTC, updateTaskTC } from "features/TodolistsList/Todolist/tasks-actions";
 
 //slice
 const sliceTasks = createSlice({
