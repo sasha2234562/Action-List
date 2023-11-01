@@ -19,10 +19,9 @@ export const Task = React.memo((props: TaskPropsType) => {
 
   const onChangeHandler = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
-      let newIsDoneValue = e.currentTarget.checked ? TaskStatuses.Completed : TaskStatuses.New;
       updateTaskTC({
         taskId: props.task.id,
-        domainModel: { status: newIsDoneValue },
+        domainModel: { status: e.currentTarget.checked ? TaskStatuses.Completed : TaskStatuses.New },
         todolistId: props.todolistId
       });
     },
