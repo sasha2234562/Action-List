@@ -2,7 +2,7 @@ import { TaskPriorities, TaskStatuses, TaskType } from "api/todolists-api";
 import { createSlice } from "@reduxjs/toolkit";
 import { clearTasksAndTodolists } from "common/actions/common-actions";
 import { addTaskTC, fetchTasksTC, removeTaskTC, updateTaskTC } from "features/TodolistsList/Todolist/tasks-actions";
-import { addTodolistTC, fetchTodolistsTC, removeTodolistTC } from "features/TodolistsList/Todolist/todolist-actions";
+import { addTodolistTC, fetchTodolistsTC, removeTodolistTC } from "features/TodolistsList/todolist-actions";
 
 //slice
 const sliceTasks = createSlice({
@@ -11,7 +11,7 @@ const sliceTasks = createSlice({
   reducers: {},
   extraReducers: builder => {
     builder.addCase(addTodolistTC.fulfilled, (state, action) => {
-      state[action.payload.todolist.id] = [];
+      if (action.payload) state[action.payload.todolist.id] = [];
     });
     builder.addCase(removeTodolistTC.fulfilled, (state, action) => {
       if (action.payload) delete state[action.payload.todolistId];

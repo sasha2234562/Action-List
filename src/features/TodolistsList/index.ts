@@ -5,7 +5,7 @@ import {
   changeTodolistTitleTC,
   fetchTodolistsTC,
   removeTodolistTC
-} from "features/TodolistsList/Todolist/todolist-actions";
+} from "features/TodolistsList/todolist-actions";
 import { selectTasks, selectTodolists } from "features/TodolistsList/Todolist/selectors";
 
 const asyncActionsTask = {

@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { appActions } from "app/app-reducer";
 import { todolistsAPI } from "api/todolists-api";
-import { handleServerNetworkError } from "utils/error-utils";
+import { handleServerAppError, handleServerNetworkError } from "utils/error-utils";
 import { actionsTodolists } from "features/TodolistsList/todolists-reducer";
 import { fetchTasksTC } from "features/TodolistsList/Todolist/tasks-actions";
 
@@ -40,10 +40,15 @@ export const addTodolistTC = createAsyncThunk("todolist/addTodolist", async (tit
   dispatch(appActions.setAppStatus({ status: "loading" }));
   try {
     const res = await todolistsAPI.createTodolist(title);
-    dispatch(appActions.setAppStatus({ status: "succeeded" }));
-    return { todolist: res.data.data.item };
+    if (res.data.resultCode === 0) {
+      dispatch(appActions.setAppStatus({ status: "succeeded" }));
+      return { todolist: res.data.data.item };
+    } else {
+      handleServerAppError(res.data, dispatch);
+    }
   } catch (e) {
-    return rejectWithValue(e)
+    handleServerNetworkError(e, dispatch);
+    return rejectWithValue(e);
   }
 
 });
@@ -53,9 +58,9 @@ export const changeTodolistTitleTC = createAsyncThunk("todolist/changeTodolistTi
   title: string
 }, { rejectWithValue }) => {
   try {
-    const res = await todolistsAPI.updateTodolist(arg.id, arg.title)
-    return { id:arg.id, title: arg.title }
+    const res = await todolistsAPI.updateTodolist(arg.id, arg.title);
+    return { id: arg.id, title: arg.title };
   } catch (e) {
-    return rejectWithValue(e)
+    return rejectWithValue(e);
   }
 });

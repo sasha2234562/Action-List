@@ -7,7 +7,7 @@ import {
   changeTodolistTitleTC,
   fetchTodolistsTC,
   removeTodolistTC
-} from "features/TodolistsList/Todolist/todolist-actions";
+} from "features/TodolistsList/todolist-actions";
 
 //slice
 export const sliceTodolists = createSlice({
@@ -37,13 +37,15 @@ export const sliceTodolists = createSlice({
       if (index !== -1) state.splice(index, 1);
     });
     builder.addCase(addTodolistTC.fulfilled, (state, action) => {
-      const newTodolist: TodolistDomainType = { ...action.payload.todolist, filter: "all", entityStatus: "idle" };
-      state.unshift(newTodolist);
+      if (action.payload) {
+        const newTodolist: TodolistDomainType = { ...action.payload.todolist, filter: "all", entityStatus: "idle" };
+        state.unshift(newTodolist);
+      }
     });
-    builder.addCase(changeTodolistTitleTC.fulfilled, (state, action)=> {
+    builder.addCase(changeTodolistTitleTC.fulfilled, (state, action) => {
       const index = state.findIndex(todo => todo.id === action.payload.id);
       if (index !== -1) state[index].title = action.payload.title;
-    })
+    });
   }
 });
 
