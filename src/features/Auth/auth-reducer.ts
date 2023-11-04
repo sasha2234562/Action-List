@@ -3,7 +3,6 @@ import { handleServerAppError, handleServerNetworkError } from "utils/error-util
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { appActions } from "app/app-reducer";
 import { clearTasksAndTodolists } from "common/actions/common-actions";
-import { AxiosError } from "axios";
 
 // thunks
 const loginTC = createAsyncThunk<{ isLoggedIn: boolean }, LoginParamsType>("login", async (data, thunkAPI) => {
@@ -17,9 +16,7 @@ const loginTC = createAsyncThunk<{ isLoggedIn: boolean }, LoginParamsType>("logi
       handleServerAppError(res.data, thunkAPI.dispatch);
       return thunkAPI.rejectWithValue({ errors: res.data.messages, fieldsErrors: res.data.fieldErrors });
     }
-  } catch (err) {
-    // @ts-ignore
-    const error: AxiosError = err;
+  } catch (error) {
     handleServerNetworkError(error, thunkAPI.dispatch);
     return thunkAPI.rejectWithValue({ errors: error, fieldsErrors: undefined });
   }
