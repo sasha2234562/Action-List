@@ -25,12 +25,9 @@ export const TodolistsList: React.FC<PropsType> = ({ demo = false }) => {
     }
     fetchTodolistsTC();
   }, []);
-  const addTodolist = useCallback(
-    (title: string) => {
-      addTodolistTC(title);
-    },
-    []
-  );
+  const addTodolist = useCallback(async (title: string) => {
+    addTodolistTC(title);
+  }, []);
   if (!isLoggedIn) {
     return <Navigate to={"/login"} />;
   }

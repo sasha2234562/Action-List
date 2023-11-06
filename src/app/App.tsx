@@ -31,15 +31,15 @@ function App({ demo = false }: PropsType) {
   const status = useSelector(selectors.selectStatus);
   const isInitialized = useSelector(selectors.selectIsInitialized);
   const isLoggedIn = useSelector(sectorAuth);
-  const { initializeAppTC } = useActions(asyncActionsinitializeApp)
-  const{logoutTC} = useActions(actionsLogin)
+  const { initializeApp } = useActions(asyncActionsinitializeApp)
+  const{logout} = useActions(actionsLogin)
 
   useEffect(() => {
-    initializeAppTC();
+    initializeApp();
   }, []);
 
   const logoutHandler = useCallback(() => {
-    logoutTC();
+    logout();
   }, []);
 
   if (!isInitialized) {

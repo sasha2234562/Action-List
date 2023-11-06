@@ -8,6 +8,7 @@ import { Delete } from "@mui/icons-material";
 import { useActions } from "app/store";
 import { tasksActions, todolistActions } from "features/TodolistsList/index";
 import { FilterValuesType, TodolistDomainType } from "features/TodolistsList/todolists-reducer";
+import { useAppDispatch } from "hooks/useAppDispatch";
 
 
 type PropsType = {
@@ -18,16 +19,25 @@ type PropsType = {
 type RerenderFilterButtonColorType = "inherit" | "primary" | "secondary" | "success" | "error" | "info" | "warning"
 export const Todolist = React.memo(function({ demo = false, ...props }: PropsType) {
 
-  const { addTaskTC} = useActions(tasksActions);
+  const { addTaskTC } = useActions(tasksActions);
   const { removeTodolistTC, changeTodolistTitleTC, changeTodolistFilter } = useActions(todolistActions);
+  const dispatch = useAppDispatch();
 
-
-  const addTask = useCallback(
-    (title: string) => {
+  const addTask = useCallback(async (title: string) => {
+    // const thunk =
       addTaskTC({ title, todolistId: props.todolist.id });
-    },
-    [props.todolist.id]
-  );
+    // const resultAction = await dispatch(thunk);
+    // if (addTaskTC.rejected.match(resultAction)) {
+    //   if (resultAction.payload?.fieldsErrors.length) {
+    //
+    //   }
+    // }
+    // if (addTaskTC.rejected.match(action)) {
+    //   if (action.payload) {
+    //
+    //   }
+    // }
+  }, [props.todolist.id]);
   const removeTodolist = () => {
     removeTodolistTC(props.todolist.id);
   };
@@ -41,12 +51,12 @@ export const Todolist = React.memo(function({ demo = false, ...props }: PropsTyp
     (filter: FilterValuesType) => changeTodolistFilter({ filter, id: props.todolist.id }),
     [props.todolist.id]
   );
-  const rerenderFilterButton = ( color: RerenderFilterButtonColorType,
+  const rerenderFilterButton = (color: RerenderFilterButtonColorType,
                                 title: string, buttonFilter: FilterValuesType) => {
 
     return <Button
       variant={props.todolist.filter === buttonFilter ? "outlined" : "text"}
-      onClick={()=> onFilterButtonClickHandler(buttonFilter)}
+      onClick={() => onFilterButtonClickHandler(buttonFilter)}
       color={color}
     >
       {title}

@@ -1,11 +1,11 @@
 import { sliceTodolists } from "features/TodolistsList/todolists-reducer";
-import { addTaskTC, fetchTasksTC, removeTaskTC, updateTaskTC } from "features/TodolistsList/Todolist/tasks-actions";
+import { addTaskTC, fetchTasksTC, removeTaskTC, updateTaskTC } from "./tasks-reduser";
 import {
   addTodolistTC,
   changeTodolistTitleTC,
   fetchTodolistsTC,
   removeTodolistTC
-} from "features/TodolistsList/todolist-actions";
+} from "features/TodolistsList/todolists-reducer";
 import { selectTasks, selectTodolists } from "features/TodolistsList/Todolist/selectors";
 
 const asyncActionsTask = {

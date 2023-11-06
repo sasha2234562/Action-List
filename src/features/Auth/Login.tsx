@@ -12,26 +12,34 @@ type FormValuesType = {
   password: string
   rememberMe: boolean
 }
+type FormikErrorType = {
+  email?: string
+  password?: string
+  rememberMe?: boolean
+}
 
 export const Login = () => {
   const dispatch = useAppDispatch();
-
-  const {loginTC} = useActions(actionsLogin);
+  const {login} = useActions(actionsLogin);
   const isLoggedIn = useSelector(sectorAuth)
 
 
   const formik = useFormik({
     validate: (values) => {
+      const errors: FormikErrorType = {};
       if (!values.email) {
-        return {
-          email: "Email is required"
-        };
+        errors.email = "Email is required";
+      } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
+        errors.email = "Invalid email address";
       }
+
       if (!values.password) {
-        return {
-          password: "Password is required"
-        };
+        errors.password = "Required";
+      } else if (values.password.length < 3) {
+        errors.password = "Must be 3 characters or more";
       }
+
+      return errors;
     },
     initialValues: {
       email: "",
@@ -39,8 +47,8 @@ export const Login = () => {
       rememberMe: false
     },
     onSubmit: async (values: FormValuesType, formikHelpers) => {
-      const res = await dispatch(actionsLogin.loginTC(values));
-      if (actionsLogin.loginTC.rejected.match(res)) {
+      const res = await dispatch(login(values));
+      if (actionsLogin.login.rejected.match(res)) {
         if (res.payload){
           formikHelpers.setFieldError("email", "fake");
         }

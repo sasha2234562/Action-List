@@ -47,13 +47,6 @@ export const todolistsAPI = {
   },
 }
 
-export type LoginParamsType = {
-  email: string
-  password: string
-  rememberMe: boolean
-  captcha?: string
-}
-
 export const authAPI = {
   login(data: LoginParamsType) {
     const promise = instance.post<ResponseType<{ userId?: number }>>("auth/login", data)
@@ -121,3 +114,9 @@ type GetTasksResponse = {
   totalCount: number
   items: TaskType[]
 }
+export type LoginParamsType = {
+  email: string;
+  password: string;
+  rememberMe: boolean;
+  captcha?: string;
+};
