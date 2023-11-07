@@ -1,13 +1,11 @@
 import React from "react";
 import { FormikHelpers, useFormik } from "formik";
 import { useSelector } from "react-redux";
-import { actionsLogin, sectorAuth } from "./index";
+import { sectorAuth } from "./index";
 import { Navigate } from "react-router-dom";
 import { useAppDispatch } from "hooks/useAppDispatch";
 import { Button, Checkbox, FormControl, FormControlLabel, FormGroup, FormLabel, Grid, TextField } from "@mui/material";
-import { useActions } from "app/store";
 import { LoginParamsType } from "api/todolists-api";
-import { unwrapResult } from "@reduxjs/toolkit";
 import { BaseResponseType } from "common/types";
 import { login } from "features/Auth/auth-reducer";
 
@@ -19,7 +17,6 @@ type FormValuesType = {
 
 export const Login = () => {
   const dispatch = useAppDispatch();
-  // const { login } = useActions(actionsLogin);
   const isLoggedIn = useSelector(sectorAuth);
 
 
@@ -62,7 +59,7 @@ export const Login = () => {
     //   password: "",
     //   rememberMe: false
     // },
-    onSubmit: async (values: FormValuesType, formikHelpers: FormikHelpers<FormValuesType>) => {
+    onSubmit: async (values: FormValuesType, formikHelpers: FormikHelpers<LoginParamsType>) => {
       dispatch(login(values)).unwrap()
         .then(res => {
 
