@@ -1,5 +1,5 @@
 import { ActionCreatorsMapObject, AnyAction, bindActionCreators, combineReducers } from "redux";
-import { ThunkAction } from "redux-thunk";
+import thunk from "redux-thunk";
 import { appReducer } from "./app-reducer";
 import { authReducer } from "features/Auth/auth-reducer";
 import { configureStore } from "@reduxjs/toolkit";

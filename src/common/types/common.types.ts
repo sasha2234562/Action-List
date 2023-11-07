@@ -9,5 +9,5 @@ export type BaseResponseType<D = {}> = {
   resultCode: number
   messages: Array<string>
   data: D
-  fieldsErrors: FieldErrorType
+  fieldsErrors: FieldErrorType[]
 }
