@@ -1,72 +1,86 @@
 import { authAPI, LoginParamsType } from "api/todolists-api";
 import { handleServerAppError, handleServerNetworkError } from "utils/error-utils";
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { appActions } from "app/app-reducer";
 import { clearTasksAndTodolists } from "common/actions/common-actions";
-import { FieldErrorType } from "features/TodolistsList/tasks-reduser";
-import { AxiosError } from "axios";
-
+import { createAppAsyncThunk } from "common/utils/create-app-async-thunk";
 // thunks
-const login = createAsyncThunk<void, LoginParamsType>("login", async (arg, { dispatch, rejectWithValue }) => {
+const login = createAppAsyncThunk<{isLoggedIn : boolean}, LoginParamsType>("login", async (arg, { dispatch, rejectWithValue }) => {
   dispatch(appActions.setAppStatus({ status: "loading" }));
   try {
     const res = await authAPI.login(arg);
     if (res.data.resultCode === 0) {
       dispatch(appActions.setAppStatus({ status: "succeeded" }));
-      return;
+      return {isLoggedIn: true};
     } else {
       handleServerAppError(res.data, dispatch);
-      return rejectWithValue({ errors: res.data.messages, fieldsErrors: res.data.fieldErrors });
+      return rejectWithValue(null)
+      // return rejectWithValue({ errors: res.data.messages, fieldsErrors: res.data.fieldErrors });
     }
   } catch (error) {
-    // @ts-ignore
-    // const error: AxiosError = err;
     handleServerNetworkError(error, dispatch);
-    return rejectWithValue({ errors: error, fieldsErrors: undefined });
+    return rejectWithValue(null)
+    // return rejectWithValue({ errors: error, fieldsErrors: undefined });
   }
 });
 
-const logout = createAsyncThunk<void, void>("auth/logout", async (_arg, {dispatch, rejectWithValue}) => {
+const logout = createAsyncThunk<{isLoggedIn: boolean}, undefined>("auth/logout", async (_, { dispatch, rejectWithValue }) => {
   try {
     dispatch(appActions.setAppStatus({ status: "loading" }));
     const res = await authAPI.logout();
     if (res.data.resultCode === 0) {
       dispatch(clearTasksAndTodolists({ todolist: [], tasks: {} }));
       dispatch(appActions.setAppStatus({ status: "succeeded" }));
-      return;
+      return { isLoggedIn : false };
     } else {
       handleServerAppError(res.data, dispatch);
-      rejectWithValue({});
+     return  rejectWithValue(null);
     }
   } catch (e) {
     handleServerNetworkError(e, dispatch);
-    return rejectWithValue({});
+    return rejectWithValue(null);
   }
 });
 
-export const asyncActionsLog = { login, logout };
+export const initializeApp = createAppAsyncThunk<{isLoggedIn: boolean}, undefined>("app/initializeAppTC",
+  async (_, thunkAPI) => {
+  try {
+    const res = await authAPI.me();
+    if (res.data.resultCode === 0) {
+      return {isLoggedIn: true};
+    } else {
+      handleServerAppError(res.data, thunkAPI.dispatch);
+      return thunkAPI.rejectWithValue(null);
+    }
+  } catch (e) {
+    handleServerNetworkError(e, thunkAPI.dispatch);
+    return thunkAPI.rejectWithValue(null);
+  } finally {
+    thunkAPI.dispatch(appActions.initializeApp());
+  }
+});
+
+export const asyncActionsLog = { login, logout ,initializeApp};
 
 const slice = createSlice({
   name: "auth",
   initialState: {
     isLoggedIn: false
   },
-  reducers: {
-    setIsLoggedIn: (state, action: PayloadAction<{ isLoggedIn: boolean }>) => {
-      state.isLoggedIn = action.payload.isLoggedIn;
-    }
-  },
+  reducers: {},
   extraReducers: builder => {
     builder.addCase(login.fulfilled, (state, action) => {
-      state.isLoggedIn = true;
+      state.isLoggedIn = action.payload.isLoggedIn;
     });
     builder.addCase(logout.fulfilled, (state, action) => {
-      state.isLoggedIn = false;
+      state.isLoggedIn = action.payload.isLoggedIn;
     });
+    builder.addCase(initializeApp.fulfilled, (state, action) => {
+      state.isLoggedIn = action.payload.isLoggedIn;
+    })
 
   }
 });
 
 
 export const authReducer = slice.reducer;
-export const { setIsLoggedIn } = slice.actions;

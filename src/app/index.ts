@@ -1,5 +1,5 @@
-import {asyncActionsinitializeApp} from "./app-reducer"
+import * as selectors from "app/app-sectors"
 
 export {
-  asyncActionsinitializeApp
+  selectors,
 }

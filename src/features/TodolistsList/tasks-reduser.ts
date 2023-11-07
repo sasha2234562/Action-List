@@ -142,7 +142,3 @@ export type UpdateDomainTaskModelType = {
   startDate?: string
   deadline?: string
 }
-export type FieldErrorType = {
-  error: string;
-  field: string;
-};

@@ -6,7 +6,6 @@ import { useSelector } from "react-redux";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Login } from "features/Auth/Login";
 import { actionsLogin } from "features/Auth";
-import { asyncActionsinitializeApp } from "../app/index";
 import {
   AppBar,
   Button,
@@ -18,7 +17,7 @@ import {
   Typography
 } from "@mui/material";
 import { Menu } from "@mui/icons-material";
-import { selectors } from "app/app.index";
+import {  selectors } from "app/index";
 import { sectorAuth } from "features/Auth";
 import { useActions } from "app/store";
 
@@ -31,7 +30,7 @@ function App({ demo = false }: PropsType) {
   const status = useSelector(selectors.selectStatus);
   const isInitialized = useSelector(selectors.selectIsInitialized);
   const isLoggedIn = useSelector(sectorAuth);
-  const { initializeApp } = useActions(asyncActionsinitializeApp)
+  const { initializeApp } = useActions(actionsLogin)
   const{logout} = useActions(actionsLogin)
 
   useEffect(() => {
