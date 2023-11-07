@@ -1,12 +1,13 @@
 import React, { useCallback, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { AppRootStateType, useActions } from "app/store";
+import { AppRootStateType } from "app/store";
 import { Grid, Paper } from "@mui/material";
 import { AddItemForm } from "components/AddItemForm/AddItemForm";
 import { Todolist } from "./Todolist/Todolist";
 import { Navigate } from "react-router-dom";
 import { selectors, todolistActions } from "features/TodolistsList/index";
 import { sectorAuth } from "features/Auth";
+import { useActions } from "hooks/useActions";
 
 type PropsType = {
   demo?: boolean

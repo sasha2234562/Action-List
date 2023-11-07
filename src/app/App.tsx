@@ -19,7 +19,7 @@ import {
 import { Menu } from "@mui/icons-material";
 import {  selectors } from "app/index";
 import { sectorAuth } from "features/Auth";
-import { useActions } from "app/store";
+import { useActions } from "hooks/useActions";
 
 type PropsType = {
   demo?: boolean

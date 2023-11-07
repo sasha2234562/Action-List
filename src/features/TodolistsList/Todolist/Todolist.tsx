@@ -5,10 +5,10 @@ import { Task } from "./Task/Task";
 import { TaskStatuses, TaskType } from "api/todolists-api";
 import { Button, IconButton } from "@mui/material";
 import { Delete } from "@mui/icons-material";
-import { useActions } from "app/store";
 import { tasksActions, todolistActions } from "features/TodolistsList/index";
 import { FilterValuesType, TodolistDomainType } from "features/TodolistsList/todolists-reducer";
 import { useAppDispatch } from "hooks/useAppDispatch";
+import { useActions } from "hooks/useActions";
 
 
 type PropsType = {
