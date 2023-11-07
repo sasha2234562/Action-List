@@ -49,7 +49,7 @@ export const initializeApp = createAppAsyncThunk<{isLoggedIn: boolean}, undefine
     if (res.data.resultCode === 0) {
       return {isLoggedIn: true};
     } else {
-      handleServerAppError(res.data, thunkAPI.dispatch);
+      // handleServerAppError(res.data, thunkAPI.dispatch);
       return thunkAPI.rejectWithValue(null);
     }
   } catch (e) {
