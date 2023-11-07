@@ -16,11 +16,6 @@ type FormValuesType = {
   password: string
   rememberMe: boolean
 }
-type FormikErrorType = {
-  email?: string
-  password?: string
-  rememberMe?: boolean
-}
 
 export const Login = () => {
   const dispatch = useAppDispatch();
@@ -30,16 +25,16 @@ export const Login = () => {
 
   const formik = useFormik({
     validate: (values) => {
-      if (!values.email) {
-        return {
-          email: "Email is required"
-        };
-      }
-      if (!values.password) {
-        return {
-          password: "Password is required"
-        };
-      }
+      // if (!values.email) {
+      //   return {
+      //     email: "Email is required"
+      //   };
+      // }
+      // if (!values.password) {
+      //   return {
+      //     password: "Password is required"
+      //   };
+      // }
     },
     initialValues: {
       email: "",
@@ -72,13 +67,10 @@ export const Login = () => {
         .then(res => {
 
         }).catch((e: BaseResponseType) => {
-        formikHelpers.setFieldError(e.fieldsErrors[0].field, e.fieldsErrors[0].error);
+        e.fieldsErrors?.forEach(i => {
+          formikHelpers.setFieldError(i.field, i.error);
+        });
       });
-      // if (actionsLogin.login.rejected.match(res)) {
-      //   if (res.payload){
-      //     formikHelpers.setFieldError("email", "fake");
-      //   }
-      // }
     }
 
   });

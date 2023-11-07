@@ -16,7 +16,7 @@ export const login = createAppAsyncThunk<{ isLoggedIn: boolean }, LoginParamsTyp
       dispatch(appActions.setAppStatus({ status: "succeeded" }));
       return { isLoggedIn: true };
     } else {
-      handleServerAppError(res.data, dispatch);
+      handleServerAppError(res.data, dispatch, false);
       return rejectWithValue(res.data);
     }
   } catch (error) {
