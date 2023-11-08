@@ -1,4 +1,11 @@
-import { TaskPriorities, TaskStatuses, TaskType, todolistsAPI, UpdateTaskModelType } from "api/todolists-api";
+import {
+  AddTaskArgType,
+  TaskPriorities,
+  TaskStatuses,
+  TaskType,
+  todolistsAPI,
+  UpdateTaskModelType
+} from "api/todolists-api";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { clearTasksAndTodolists } from "common/actions/common-actions";
 import { appActions } from "app/app-reducer";
@@ -6,6 +13,7 @@ import { handleServerAppError, handleServerNetworkError } from "utils/error-util
 import { AppRootStateType } from "app/store";
 import { addTodolistTC, fetchTodolistsTC, removeTodolistTC } from "features/TodolistsList/todolists-reducer";
 import { AxiosError } from "axios";
+import { thunkTryCatch } from "common/utils/thunkTryCatch";
 
 export const fetchTasksTC = createAsyncThunk("tasks/fetchTasks", async (todolistId: string, thunkAPI) => {
   thunkAPI.dispatch(appActions.setAppStatus({ status: "loading" }));
@@ -22,16 +30,14 @@ export const removeTaskTC = createAsyncThunk("tasks/removeTask", async (arg: {
   return { taskId: arg.taskId, todolistId: arg.todolistId };
 });
 
-export const addTaskTC = createAsyncThunk
-  //   <TaskType, { title: string, todolistId: string }
-  //   { rejectedValue: { errors: Array<string>, fieldsErrors?: Array<FieldErrorType> } }
-  // >
-  ("task/addTask", async (arg: {
+export const addTaskTC = createAsyncThunk<{ task: TaskType }, AddTaskArgType>("task/addTask", async (arg: {
     title: string,
     todolistId: string
-  }, { dispatch, rejectWithValue }) => {
-    dispatch(appActions.setAppStatus({ status: "loading" }));
-    try {
+  }, thunkAPI) => {
+
+  const { dispatch, rejectWithValue } = thunkAPI
+  // @ts-ignore
+  return thunkTryCatch(thunkAPI, async ()=> {
       const res = await todolistsAPI.createTask(arg.todolistId, arg.title);
       if (res.data.resultCode === 0) {
         const task = res.data.data.item;
@@ -41,11 +47,23 @@ export const addTaskTC = createAsyncThunk
         handleServerAppError(res.data, dispatch);
         return rejectWithValue(res.data.messages);
       }
-    } catch (error: any) {
-      // const e: AxiosError = error;
-      handleServerNetworkError(error, dispatch);
-      return rejectWithValue(error);
-    }
+  })
+    // dispatch(appActions.setAppStatus({ status: "loading" }));
+    // try {
+    //   const res = await todolistsAPI.createTask(arg.todolistId, arg.title);
+    //   if (res.data.resultCode === 0) {
+    //     const task = res.data.data.item;
+    //     dispatch(appActions.setAppStatus({ status: "succeeded" }));
+    //     return { task };
+    //   } else {
+    //     handleServerAppError(res.data, dispatch);
+    //     return rejectWithValue(res.data.messages);
+    //   }
+    // } catch (error: any) {
+    //   // const e: AxiosError = error;
+    //   handleServerNetworkError(error, dispatch);
+    //   return rejectWithValue(error);
+    // }
   });
 
 export const updateTaskTC = createAsyncThunk("task/updateTaskTC", async (arg: {

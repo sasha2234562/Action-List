@@ -14,6 +14,11 @@ type FormValuesType = {
   password: string
   rememberMe: boolean
 }
+type FormikErrorType = {
+  email?: string
+  password?: string
+  rememberMe?: boolean
+}
 
 export const Login = () => {
   const dispatch = useAppDispatch();
@@ -21,49 +26,33 @@ export const Login = () => {
 
 
   const formik = useFormik({
+
     validate: (values) => {
-      // if (!values.email) {
-      //   return {
-      //     email: "Email is required"
-      //   };
-      // }
-      // if (!values.password) {
-      //   return {
-      //     password: "Password is required"
-      //   };
-      // }
+      const errors: FormikErrorType = {};
+      if (!values.email) {
+        errors.email = "Email is required";
+      } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
+        errors.email = "Invalid email address";
+      }
+
+      if (!values.password) {
+        errors.password = "Password is required";
+      } else if (values.password.length < 3) {
+        errors.password = "Must be 3 characters or more";
+      }
+      return errors;
     },
     initialValues: {
       email: "",
       password: "",
       rememberMe: false
     },
-    // validate: (values) => {
-    //   const errors: FormikErrorType = {};
-    //   if (!values.email) {
-    //     errors.email = "Email is required";
-    //   } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
-    //     errors.email = "Invalid email address";
-    //   }
-    //
-    //   if (!values.password) {
-    //     errors.password = "Required";
-    //   } else if (values.password.length < 3) {
-    //     errors.password = "Must be 3 characters or more";
-    //   }
-    //
-    //   return errors;
-    // },
-    // initialValues: {
-    //   email: "",
-    //   password: "",
-    //   rememberMe: false
-    // },
     onSubmit: async (values: FormValuesType, formikHelpers: FormikHelpers<LoginParamsType>) => {
       dispatch(login(values)).unwrap()
         .then(res => {
 
         }).catch((e: BaseResponseType) => {
+          //
         e.fieldsErrors?.forEach(i => {
           formikHelpers.setFieldError(i.field, i.error);
         });

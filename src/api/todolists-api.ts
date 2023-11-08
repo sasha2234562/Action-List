@@ -115,3 +115,8 @@ export type LoginParamsType = {
   rememberMe: boolean;
   captcha?: string;
 };
+
+export type AddTaskArgType = {
+  title: string;
+  todolistId: string;
+};
