@@ -1,0 +1,1 @@
+export {authThunks, authSlice} from "./auth.slice"
