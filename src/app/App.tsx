@@ -1,11 +1,6 @@
-import React, { useCallback, useEffect } from "react";
-import "./App.css";
-import { TodolistsList } from "features/TodolistsList/TodolistsList";
-import { ErrorSnackbar } from "components/ErrorSnackbar/ErrorSnackbar";
+import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { Login } from "features/Auth/Login";
-import { actionsLogin } from "features/Auth";
 import {
   AppBar,
   Button,
@@ -14,43 +9,34 @@ import {
   IconButton,
   LinearProgress,
   Toolbar,
-  Typography
+  Typography,
 } from "@mui/material";
 import { Menu } from "@mui/icons-material";
-import {  selectors } from "app/index";
-import { sectorAuth } from "features/Auth";
-import { useActions } from "hooks/useActions";
+import { Login } from "features/auth/ui/login/login";
+import "./App.css";
+import { TodolistsList } from "features/TodolistsList/TodolistsList";
+import { ErrorSnackbar } from "common/components";
+import { useActions } from "common/hooks";
+import { selectIsLoggedIn } from "features/auth/model/auth.selectors";
+import { selectAppStatus, selectIsInitialized } from "app/app.selectors";
+import {authThunks} from "features/auth/model";
 
-type PropsType = {
-  demo?: boolean
-}
+function App() {
+  const status = useSelector(selectAppStatus);
+  const isInitialized = useSelector(selectIsInitialized);
+  const isLoggedIn = useSelector(selectIsLoggedIn);
 
-
-function App({ demo = false }: PropsType) {
-  const status = useSelector(selectors.selectStatus);
-  const isInitialized = useSelector(selectors.selectIsInitialized);
-  const isLoggedIn = useSelector(sectorAuth);
-  const { initializeApp } = useActions(actionsLogin)
-  const{logout} = useActions(actionsLogin)
+  const { initializeApp, logout } = useActions(authThunks);
 
   useEffect(() => {
     initializeApp();
   }, []);
 
-  const logoutHandler = useCallback(() => {
-    logout();
-  }, []);
+  const logoutHandler = () => logout();
 
   if (!isInitialized) {
     return (
-      <div
-        style={{
-          position: "fixed",
-          top: "30%",
-          textAlign: "center",
-          width: "100%"
-        }}
-      >
+      <div style={{ position: "fixed", top: "30%", textAlign: "center", width: "100%" }}>
         <CircularProgress />
       </div>
     );
@@ -76,7 +62,7 @@ function App({ demo = false }: PropsType) {
         </AppBar>
         <Container fixed>
           <Routes>
-            <Route path={"/"} element={<TodolistsList demo={demo} />} />
+            <Route path={"/"} element={<TodolistsList />} />
             <Route path={"/login"} element={<Login />} />
           </Routes>
         </Container>
