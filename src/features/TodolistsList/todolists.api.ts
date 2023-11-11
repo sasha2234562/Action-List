@@ -3,7 +3,7 @@ import { TaskPriorities, TaskStatuses } from "common/enums/common.enums";
 import { UpdateDomainTaskModelType } from "features/TodolistsList/tasks.reducer";
 import { BaseResponseType } from "common/types";
 
-export const todolistssApi = {
+export const todolistsApi = {
   getTodolists() {
     return instance.get<TodolistType[]>("todo-lists");
   },

@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 import { appActions } from "app/app.reducer";
 import { todolistsThunks } from "features/TodolistsList/todolists.reducer";
 import {
@@ -7,7 +7,7 @@ import {
   TaskType,
   todolistsApi,
   UpdateTaskArgType,
-  UpdateTaskModelType,
+  UpdateTaskModelType
 } from "features/TodolistsList/todolists.api";
 import { createAppAsyncThunk, handleServerAppError, thunkTryCatch } from "common/utils";
 import { ResultCode, TaskPriorities, TaskStatuses } from "common/enums";
