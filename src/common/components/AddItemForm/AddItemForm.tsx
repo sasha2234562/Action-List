@@ -1,6 +1,7 @@
 import React, { ChangeEvent, KeyboardEvent, useState } from "react";
 import { IconButton, TextField } from "@mui/material";
 import { AddBox } from "@mui/icons-material";
+import { AxiosError } from "axios";
 
 type AddItemFormPropsType = {
   addItem: (title: string) => Promise<any>;
@@ -16,9 +17,11 @@ export const AddItemForm = React.memo(function({ addItem, disabled = false }: Ad
       try {
         await addItem(title)
         setTitle("");
-      } catch (error) {
-        console.log(error)
-        // setError(error);
+        setError(null)
+      } catch (error : unknown | AxiosError) {
+        if(error instanceof Error){
+          setError(error.message as string);
+        }
       }
     } else {
       setError("Title is required");
@@ -26,7 +29,7 @@ export const AddItemForm = React.memo(function({ addItem, disabled = false }: Ad
   };
 
   const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-    setTitle(e.currentTarget.value);
+    setError(null)
   };
 
   const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {

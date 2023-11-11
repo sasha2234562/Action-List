@@ -15,10 +15,7 @@ export const TodolistsList = () => {
   const tasks = useSelector(selectTasks);
   const isLoggedIn = useSelector(selectIsLoggedIn);
 
-  const {
-    addTodolist: addTodolistThunk,
-    fetchTodolists,
-  } = useActions(todolistsThunks);
+  const { addTodolist: addTodolistThunk, fetchTodolists } = useActions(todolistsThunks);
 
   useEffect(() => {
     if (!isLoggedIn) {
@@ -28,7 +25,10 @@ export const TodolistsList = () => {
   }, []);
 
   const addTodolist = useCallback(async (title: string) => {
-    addTodolistThunk(title);
+    await addTodolistThunk(title).unwrap().catch((e) => {
+      const error = e.messages[0];
+      throw new Error(error);
+    });
   }, []);
 
   if (!isLoggedIn) {

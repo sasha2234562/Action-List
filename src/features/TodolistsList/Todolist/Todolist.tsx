@@ -18,6 +18,7 @@ export const Todolist = React.memo(function(props: PropsType) {
   const { fetchTasks, addTask } = useActions(tasksThunks);
   const { changeTodolistTitle, removeTodolist } = useActions(todolistsThunks);
   const { changeTodolistFilter } = useActions(todolistsActions);
+
   useEffect(() => {
     fetchTasks(props.todolist.id);
   }, []);
@@ -25,7 +26,6 @@ export const Todolist = React.memo(function(props: PropsType) {
   const createTask = useCallback(
    async (title: string) => {
      await addTask({ title,todolistId: props.todolist.id }).unwrap().catch((e)=> {
-       console.log(e.messages[0]);
        const error = e.messages[0]
        throw new Error(error)
      })
@@ -72,6 +72,7 @@ export const Todolist = React.memo(function(props: PropsType) {
       </h3>
       <AddItemForm addItem={createTask} disabled={props.todolist.entityStatus === "loading"} />
       <div>
+        {props.tasks.length ? null : <div>No Tasks</div>}
         {tasksForTodolist.map((t) => (
           <Task
             key={t.id}

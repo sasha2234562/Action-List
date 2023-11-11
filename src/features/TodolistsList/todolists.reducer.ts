@@ -22,10 +22,10 @@ const addTodolist = createAppAsyncThunk<{ todolist: TodolistType }, string>(
     return thunkTryCatch(thunkAPI, async () => {
       const res = await todolistsApi.createTodolist(title);
       if (res.data.resultCode === ResultCode.Success) {
+        handleServerAppError(res.data, dispatch, false);
         return { todolist: res.data.data.item };
       } else {
-        handleServerAppError(res.data, dispatch);
-        return rejectWithValue(null);
+        return rejectWithValue(res.data);
       }
     });
   }
