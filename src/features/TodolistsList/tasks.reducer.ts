@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { appActions } from "app/app.reducer";
 import { todolistsThunks } from "features/TodolistsList/todolists.reducer";
 import {
@@ -23,7 +23,6 @@ const fetchTasks = createAppAsyncThunk<{ tasks: TaskType[]; todolistId: string }
     });
   },
 );
-
 const addTask = createAppAsyncThunk<{ task: TaskType }, AddTaskArgType>("tasks/addTask", async (arg, thunkAPI) => {
   const { dispatch, rejectWithValue } = thunkAPI;
   return thunkTryCatch(thunkAPI, async () => {
@@ -33,7 +32,7 @@ const addTask = createAppAsyncThunk<{ task: TaskType }, AddTaskArgType>("tasks/a
       return { task };
     } else {
       handleServerAppError(res.data, dispatch);
-      return rejectWithValue(null);
+      return rejectWithValue(res.data);
     }
   });
 });

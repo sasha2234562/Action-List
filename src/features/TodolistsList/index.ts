@@ -1,2 +1,2 @@
-export {tasksThunks} from "./tasks.reducer"
-export {todolistsThunks} from"./todolists.reducer"
+export {tasksThunks,tasksReducer} from "./tasks.reducer"
+export {todolistsThunks, todolistsActions,todolistsReducer} from"./todolists.reducer"

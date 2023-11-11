@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { FilterValuesType, todolistsActions, todolistsThunks } from "features/TodolistsList/todolists.reducer";
-import { tasksThunks } from "features/TodolistsList/tasks.reducer";
+import { todolistsThunks } from "features/TodolistsList/todolists.reducer";
 import { Grid, Paper } from "@mui/material";
 import { AddItemForm } from "common/components";
 import { Todolist } from "./Todolist/Todolist";
@@ -21,20 +20,14 @@ export const TodolistsList = () => {
     fetchTodolists,
   } = useActions(todolistsThunks);
 
-  const { addTask: addTaskThunk, removeTask: removeTaskThunk, updateTask } = useActions(tasksThunks);
-  const { changeTodolistFilter } = useActions(todolistsActions);
-
   useEffect(() => {
     if (!isLoggedIn) {
       return;
     }
     fetchTodolists();
   }, []);
-  const changeFilter = useCallback(function (filter: FilterValuesType, id: string) {
-    changeTodolistFilter({ id, filter });
-  }, []);
 
-  const addTodolist = useCallback((title: string) => {
+  const addTodolist = useCallback(async (title: string) => {
     addTodolistThunk(title);
   }, []);
 
@@ -57,7 +50,6 @@ export const TodolistsList = () => {
                 <Todolist
                   todolist={tl}
                   tasks={allTodolistTasks}
-                  changeFilter={changeFilter}
                 />
               </Paper>
             </Grid>
