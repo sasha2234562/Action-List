@@ -1,4 +1,6 @@
 export {tasksThunks,tasksReducer} from "./tasks.reducer"
+export * from "./tasks.selectors"
 export type {TasksStateType} from "./tasks.reducer"
 export {todolistsThunks, todolistsActions,todolistsReducer} from"./todolists.reducer"
+export * from "./todolists.selectors"
 export type {  FilterValuesType, TodolistDomainType} from "./todolists.reducer"

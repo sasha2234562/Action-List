@@ -5,7 +5,7 @@ import { TaskType } from "features/TodolistsList/todolists.api";
 import { EditableSpan } from "common/components";
 import { TaskStatuses } from "common/enums";
 import { useActions } from "common/hooks";
-import { tasksThunks } from "features/TodolistsList/index";
+import { tasksThunks } from "features/TodolistsList";
 
 type TaskPropsType = {
   task: TaskType;

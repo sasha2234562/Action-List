@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
 import { Button, Checkbox, FormControl, FormControlLabel, FormGroup, FormLabel, Grid, TextField } from "@mui/material";
 import { useActions } from "common/hooks";
-import { selectIsLoggedIn } from "features/auth/model/auth.selectors";
+import { selectIsLoggedIn } from "features/auth/model";
 import { authThunks } from "features/auth/model";
 import { LoginParamsType } from "features/auth/api/auth.api";
 import { BaseResponseType } from "common/types";
