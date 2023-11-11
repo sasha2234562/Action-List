@@ -10,7 +10,6 @@ import { useActions } from "common/hooks";
 import { selectIsLoggedIn } from "features/auth/model/auth.selectors";
 import { selectTasks } from "features/TodolistsList/tasks.selectors";
 import { selectTodolists } from "features/TodolistsList/todolists.selectors";
-import { TaskStatuses } from "common/enums";
 
 export const TodolistsList = () => {
   const todolists = useSelector(selectTodolists);
@@ -18,10 +17,8 @@ export const TodolistsList = () => {
   const isLoggedIn = useSelector(selectIsLoggedIn);
 
   const {
-    removeTodolist: removeTodolistThunk,
     addTodolist: addTodolistThunk,
     fetchTodolists,
-    changeTodolistTitle: changeTodolistTitleThunk,
   } = useActions(todolistsThunks);
 
   const { addTask: addTaskThunk, removeTask: removeTaskThunk, updateTask } = useActions(tasksThunks);
@@ -33,33 +30,8 @@ export const TodolistsList = () => {
     }
     fetchTodolists();
   }, []);
-
-  const removeTask = useCallback(function (taskId: string, todolistId: string) {
-    removeTaskThunk({ taskId, todolistId });
-  }, []);
-
-  const addTask = useCallback(function (title: string, todolistId: string) {
-    addTaskThunk({ title, todolistId });
-  }, []);
-
-  const changeStatus = useCallback(function (taskId: string, status: TaskStatuses, todolistId: string) {
-    updateTask({ taskId, domainModel: { status }, todolistId });
-  }, []);
-
-  const changeTaskTitle = useCallback(function (taskId: string, title: string, todolistId: string) {
-    updateTask({ taskId, domainModel: { title }, todolistId });
-  }, []);
-
   const changeFilter = useCallback(function (filter: FilterValuesType, id: string) {
     changeTodolistFilter({ id, filter });
-  }, []);
-
-  const removeTodolist = useCallback(function (id: string) {
-    removeTodolistThunk(id);
-  }, []);
-
-  const changeTodolistTitle = useCallback(function (id: string, title: string) {
-    changeTodolistTitleThunk({ id, title });
   }, []);
 
   const addTodolist = useCallback((title: string) => {
@@ -85,13 +57,7 @@ export const TodolistsList = () => {
                 <Todolist
                   todolist={tl}
                   tasks={allTodolistTasks}
-                  removeTask={removeTask}
                   changeFilter={changeFilter}
-                  addTask={addTask}
-                  changeTaskStatus={changeStatus}
-                  removeTodolist={removeTodolist}
-                  changeTaskTitle={changeTaskTitle}
-                  changeTodolistTitle={changeTodolistTitle}
                 />
               </Paper>
             </Grid>
