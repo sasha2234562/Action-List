@@ -29,7 +29,7 @@ export const AddItemForm = React.memo(function({ addItem, disabled = false }: Ad
   };
 
   const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-    setError(null)
+    setTitle(e.currentTarget.value);
   };
 
   const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {

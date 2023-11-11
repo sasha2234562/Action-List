@@ -27,6 +27,7 @@ export const Todolist = React.memo(function(props: PropsType) {
    async (title: string) => {
      await addTask({ title,todolistId: props.todolist.id }).unwrap().catch((e)=> {
        const error = e.messages[0]
+       debugger
        throw new Error(error)
      })
     },
@@ -39,7 +40,8 @@ export const Todolist = React.memo(function(props: PropsType) {
 
   const changeTodolistTitleHandler = useCallback(
     (title: string) => {
-      changeTodolistTitle({ id: props.todolist.id, title });
+      changeTodolistTitle({ id: props.todolist.id, title }).unwrap().catch(e=> {
+      });
     },
     [props.todolist.id]
   );
