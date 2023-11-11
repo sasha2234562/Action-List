@@ -17,8 +17,8 @@ import "./App.css";
 import { TodolistsList } from "features/TodolistsList/TodolistsList";
 import { ErrorSnackbar } from "common/components";
 import { useActions } from "common/hooks";
-import { selectIsLoggedIn } from "features/auth/model/auth.selectors";
-import { selectAppStatus, selectIsInitialized } from "app/app.selectors";
+import { selectIsLoggedIn } from "features/auth/model";
+import { selectAppStatus, selectIsInitialized } from "app";
 import {authThunks} from "features/auth/model";
 
 function App() {

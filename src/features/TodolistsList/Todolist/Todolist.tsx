@@ -7,7 +7,7 @@ import { TaskType } from "features/TodolistsList/todolists.api";
 import { TaskStatuses } from "common/enums";
 import { useActions } from "common/hooks";
 import { AddItemForm, EditableSpan } from "common/components";
-import { FilterValuesType, TodolistDomainType } from "features/TodolistsList/todolists.reducer";
+import { FilterValuesType, TodolistDomainType } from "features/TodolistsList";
 
 type PropsType = {
   todolist: TodolistDomainType;

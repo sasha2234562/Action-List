@@ -2,8 +2,8 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { AlertProps, Snackbar } from "@mui/material";
 import MuiAlert from "@mui/material/Alert";
-import { appActions } from "app/app.reducer";
-import { selectAppError } from "app/app.selectors";
+import { appActions } from "app";
+import { selectAppError } from "app";
 import { useActions } from "common/hooks";
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(props, ref) {
