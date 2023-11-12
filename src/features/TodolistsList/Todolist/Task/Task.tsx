@@ -16,7 +16,6 @@ export const Task = React.memo((props: TaskPropsType) => {
 
   const { removeTask, updateTask } = useActions(tasksThunks);
 
-
   const onClickHandler = useCallback(
     () => removeTask({ taskId: props.task.id, todolistId: props.todolistId }),
     [props.task.id, props.todolistId]
