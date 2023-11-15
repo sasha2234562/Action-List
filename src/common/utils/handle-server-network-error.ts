@@ -1,5 +1,5 @@
 import axios from "axios";
-import { appActions } from "app/app.reducer";
+import { appActions } from "app/redusers/app.reducer";
 import { AppDispatch } from "app/types";
 
 /**

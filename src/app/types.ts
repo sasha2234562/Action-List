@@ -1,4 +1,4 @@
-import { initialState } from "app/app.reducer";
+import { initialState } from "app/redusers/app.reducer";
 import { store } from "app/store";
 
 

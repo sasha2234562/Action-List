@@ -1,16 +1,18 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { tasksReducer } from "features/TodolistsList";
-import { todolistsReducer } from "features/TodolistsList";
-import { appReducer } from "app/app.reducer";
-import {authSlice} from "features/auth/model";
+import thunkMiddleware from "redux-thunk"
+import { rootReducer } from "app/redusers/reducers";
 
 export const store = configureStore({
-  reducer: {
-    tasks: tasksReducer,
-    todolists: todolistsReducer,
-    app: appReducer,
-    auth: authSlice,
-  },
-});
+  reducer: rootReducer,
+  middleware: getDefaultMiddleware => getDefaultMiddleware().prepend(thunkMiddleware)
+})
+
+// а это, чтобы можно было в консоли браузера обращаться к store в любой момент
 // @ts-ignore
-window.store = store;
+window.store = store
+
+// if (process.env.NODE_ENV === 'development' && module.hot) {
+//   module.hot.accept('./reducers', () => {
+//     store.replaceReducer(rootReducer)
+//   })
+// }
