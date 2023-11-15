@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import {
@@ -29,7 +29,9 @@ function App() {
   const { initializeApp, logout } = useActions(authThunks);
 
   useEffect(() => {
-    initializeApp();
+    if(!isInitialized) {
+      initializeApp();
+    }
   }, []);
 
   const logoutHandler = () => logout();
@@ -60,7 +62,7 @@ function App() {
           </Toolbar>
           {status === "loading" && <LinearProgress />}
         </AppBar>
-        <Container fixed>
+        <Container fixed >
           <Routes>
             <Route path={"/"} element={<TodolistsList />} />
             <Route path={"/login"} element={<Login />} />

@@ -15,7 +15,7 @@ export const TodolistsList = () => {
   const tasks = useSelector(selectTasks);
   const isLoggedIn = useSelector(selectIsLoggedIn);
 
-  const { addTodolist: addTodolistThunk, fetchTodolists } = useActions(todolistsThunks);
+  const {  fetchTodolists, addTodolist } = useActions(todolistsThunks);
 
   useEffect(() => {
     if (!isLoggedIn) {
@@ -24,8 +24,8 @@ export const TodolistsList = () => {
     fetchTodolists();
   }, []);
 
-  const addTodolist = useCallback(async (title: string) => {
-    await addTodolistThunk(title).unwrap().catch((e) => {
+  const createTodolist = useCallback(async (title: string) => {
+    await addTodolist(title).unwrap().catch((e) => {
       const error = e.messages[0];
       throw new Error(error);
     });
@@ -38,15 +38,15 @@ export const TodolistsList = () => {
   return (
     <>
       <Grid container style={{ padding: "20px" }}>
-        <AddItemForm addItem={addTodolist} />
+        <AddItemForm addItem={createTodolist} />
       </Grid>
-      <Grid container spacing={3}>
+      <Grid container spacing={3} style={{flex: "0 1 33.333%"}}>
         {todolists.map((tl) => {
           let allTodolistTasks = tasks[tl.id];
 
           return (
-            <Grid item key={tl.id}>
-              <Paper style={{ padding: "10px" }}>
+            <Grid item key={tl.id} >
+              <Paper style={{ padding: "10px", width: "37vh"}}>
                 <Todolist
                   todolist={tl}
                   tasks={allTodolistTasks}
