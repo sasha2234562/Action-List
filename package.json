@@ -1,5 +1,5 @@
 {
-  "name": "Todolist",
+  "name": "todolist",
   "homepage": "https://sasha2234562.github.io/Todolist",
   "jest": {
     "moduleNameMapper": {

@@ -9,6 +9,7 @@ import { useActions } from "common/hooks";
 import { selectIsLoggedIn } from "features/auth/model";
 import { selectTasks } from "features/TodolistsList";
 import { selectTodolists } from "features/TodolistsList";
+import l from "features/TodolistsList/Todolists-List.module.css"
 
 export const TodolistsList = () => {
   const todolists = useSelector(selectTodolists);
@@ -37,16 +38,16 @@ export const TodolistsList = () => {
 
   return (
     <>
-      <Grid container style={{ padding: "20px" }}>
+      <Grid container className={l.itemForm}>
         <AddItemForm addItem={createTodolist} />
       </Grid>
-      <Grid container spacing={3} style={{flex: "0 1 33.333%"}}>
+      <Grid container spacing={3} className={l.todolistsContainer}>
         {todolists.map((tl) => {
           let allTodolistTasks = tasks[tl.id];
 
           return (
             <Grid item key={tl.id} >
-              <Paper style={{ padding: "10px", width: "37vh"}}>
+              <Paper className={l.paper}>
                 <Todolist
                   todolist={tl}
                   tasks={allTodolistTasks}

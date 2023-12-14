@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import {
@@ -9,7 +9,7 @@ import {
   IconButton,
   LinearProgress,
   Toolbar,
-  Typography,
+  Typography
 } from "@mui/material";
 import { Menu } from "@mui/icons-material";
 import { Login } from "features/auth/ui/login/login";
@@ -17,9 +17,8 @@ import "./App.css";
 import { TodolistsList } from "features/TodolistsList/TodolistsList";
 import { ErrorSnackbar } from "common/components";
 import { useActions } from "common/hooks";
-import { selectIsLoggedIn } from "features/auth/model";
+import { authThunks, selectIsLoggedIn } from "features/auth/model";
 import { selectAppStatus, selectIsInitialized } from "app";
-import {authThunks} from "features/auth/model";
 
 function App() {
   const status = useSelector(selectAppStatus);
@@ -27,7 +26,6 @@ function App() {
   const isLoggedIn = useSelector(selectIsLoggedIn);
 
   const { initializeApp, logout } = useActions(authThunks);
-
   useEffect(() => {
     if(!isInitialized) {
       initializeApp();
@@ -38,7 +36,7 @@ function App() {
 
   if (!isInitialized) {
     return (
-      <div style={{ position: "fixed", top: "30%", textAlign: "center", width: "100%" }}>
+      <div className={'progress'}>
         <CircularProgress />
       </div>
     );
@@ -64,7 +62,7 @@ function App() {
         </AppBar>
         <Container fixed >
           <Routes>
-            <Route path={"/"} element={<TodolistsList />} />
+            <Route path={"/Todolist"} element={<TodolistsList />} />
             <Route path={"/login"} element={<Login />} />
           </Routes>
         </Container>

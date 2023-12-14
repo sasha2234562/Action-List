@@ -1,0 +1,12 @@
+.itemForm {
+    padding: 20px;
+}
+
+.todolistsContainer {
+    flex: 0 1 33.333%
+}
+
+.paper {
+    padding: 10px;
+    width: 37vh
+}
