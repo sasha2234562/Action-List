@@ -1,6 +1,6 @@
 {
-  "name": "todolist",
-  "homepage": "https://sasha2234562.github.io/Todolist",
+  "name": "action-list",
+  "homepage": "https://sasha2234562.github.io/Action-List",
   "jest": {
     "moduleNameMapper": {
       "axios": "axios/dist/node/axios.cjs"
