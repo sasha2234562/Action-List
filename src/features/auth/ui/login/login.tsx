@@ -1,41 +1,50 @@
-import React from "react";
-import { FormikHelpers, useFormik } from "formik";
-import { useSelector } from "react-redux";
-import { Navigate } from "react-router-dom";
-import { Button, Checkbox, FormControl, FormControlLabel, FormGroup, FormLabel, Grid, TextField } from "@mui/material";
-import { useActions } from "common/hooks";
-import { selectIsLoggedIn } from "features/auth/model";
-import { authThunks } from "features/auth/model";
-import { LoginParamsType } from "features/auth/api/auth.api";
-import { BaseResponseType } from "common/types";
-import s from "features/auth/ui/login/login.module.css";
+import React from "react"
+import { FormikHelpers, useFormik } from "formik"
+import { useSelector } from "react-redux"
+import { Navigate } from "react-router-dom"
+import {
+  Button,
+  Checkbox,
+  FormControl,
+  FormControlLabel,
+  FormGroup,
+  FormLabel,
+  Grid,
+  TextField,
+} from "@mui/material"
+import { useActions } from "common/hooks"
+import { selectIsLoggedIn } from "features/auth/model"
+import { authThunks } from "features/auth/model"
+import { LoginParamsType } from "features/auth/api/auth.api"
+import { BaseResponseType } from "common/types"
+import s from "features/auth/ui/login/login.module.css"
 
 type FormikErrorType = {
-  email?: string;
-  password?: string;
-  rememberMe?: boolean;
-};
+  email?: string
+  password?: string
+  rememberMe?: boolean
+}
 
 export const Login = () => {
-  const { login } = useActions(authThunks);
-  const isLoggedIn = useSelector(selectIsLoggedIn);
+  const { login } = useActions(authThunks)
+  const isLoggedIn = useSelector(selectIsLoggedIn)
 
   const formik = useFormik({
     validate: (values) => {
-      const errors: FormikErrorType = {};
+      const errors: FormikErrorType = {}
       if (!values.email) {
-        errors.email = "Email is required";
+        errors.email = "Email is required"
       } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
-        errors.email = "Invalid email address";
+        errors.email = "Invalid email address"
       }
 
       if (!values.password) {
-        errors.password = "Required";
+        errors.password = "Required"
       } else if (values.password.length < 3) {
-        errors.password = "Must be 3 characters or more";
+        errors.password = "Must be 3 characters or more"
       }
 
-      return errors;
+      return errors
     },
     initialValues: {
       email: "",
@@ -47,14 +56,14 @@ export const Login = () => {
         .unwrap()
         .catch((reason: BaseResponseType) => {
           reason.fieldsErrors?.forEach((fieldError) => {
-            formikHelpers.setFieldError(fieldError.field, fieldError.error);
-          });
-        });
+            formikHelpers.setFieldError(fieldError.field, fieldError.error)
+          })
+        })
     },
-  });
+  })
 
   if (isLoggedIn) {
-    return <Navigate to={"/Todolist"} />;
+    return <Navigate to={"/action-List"} />
   }
 
   return (
@@ -65,7 +74,11 @@ export const Login = () => {
             <FormLabel>
               <p>
                 To log in get registered{" "}
-                <a href={"https://social-network.samuraijs.com/"} target={"_blank"} rel="noreferrer">
+                <a
+                  href={"https://social-network.samuraijs.com/"}
+                  target={"_blank"}
+                  rel="noreferrer"
+                >
                   here
                 </a>
               </p>
@@ -75,12 +88,26 @@ export const Login = () => {
             </FormLabel>
             <FormGroup>
               <TextField label="Email" margin="normal" {...formik.getFieldProps("email")} />
-              {formik.touched.email && formik.errors.email && <p className={s.error}>{formik.errors.email}</p>}
-              <TextField type="password" label="Password" margin="normal" {...formik.getFieldProps("password")} />
-              {formik.touched.password && formik.errors.password && <p className={s.error}>{formik.errors.password}</p>}
+              {formik.touched.email && formik.errors.email && (
+                <p className={s.error}>{formik.errors.email}</p>
+              )}
+              <TextField
+                type="password"
+                label="Password"
+                margin="normal"
+                {...formik.getFieldProps("password")}
+              />
+              {formik.touched.password && formik.errors.password && (
+                <p className={s.error}>{formik.errors.password}</p>
+              )}
               <FormControlLabel
                 label={"Remember me"}
-                control={<Checkbox {...formik.getFieldProps("rememberMe")} checked={formik.values.rememberMe} />}
+                control={
+                  <Checkbox
+                    {...formik.getFieldProps("rememberMe")}
+                    checked={formik.values.rememberMe}
+                  />
+                }
               />
               <Button
                 type={"submit"}
@@ -95,5 +122,5 @@ export const Login = () => {
         </form>
       </Grid>
     </Grid>
-  );
-};
+  )
+}
