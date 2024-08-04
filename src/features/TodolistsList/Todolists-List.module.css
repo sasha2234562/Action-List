@@ -3,10 +3,11 @@
 }
 
 .todolistsContainer {
-    flex: 0 1 33.333%
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 40px;
 }
 
 .paper {
     padding: 10px;
-    width: 37vh
 }

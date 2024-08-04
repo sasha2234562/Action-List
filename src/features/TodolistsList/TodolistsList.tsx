@@ -43,7 +43,7 @@ export const TodolistsList = () => {
       <Grid container className={l.itemForm}>
         <AddItemForm addItem={createTodolist} />
       </Grid>
-      <Grid container spacing={3} className={l.todolistsContainer}>
+      <div className={l.todolistsContainer}>
         {todolists.map((tl) => {
           let allTodolistTasks = tasks[tl.id]
 
@@ -55,7 +55,7 @@ export const TodolistsList = () => {
             </Grid>
           )
         })}
-      </Grid>
+      </div>
     </>
   )
 }
