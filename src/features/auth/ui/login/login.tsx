@@ -63,7 +63,7 @@ export const Login = () => {
   })
 
   if (isLoggedIn) {
-    return <Navigate to={"/action-List"} />
+    return <Navigate to={"/Action-List"} />
   }
 
   return (

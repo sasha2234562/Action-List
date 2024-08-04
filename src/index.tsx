@@ -12,13 +12,8 @@ const rerenderEntireTree = () => {
         <BrowserRouter>
             <Provider store={store}>
                 <App/>
-            </Provider>,
+            </Provider>
         </BrowserRouter>
     );
 }
 rerenderEntireTree()
-// if (process.env.NODE_ENV === 'development' && module.require) {
-//   module.hot.accept('./app/App', () => {
-//     rerenderEntireTree();
-//   })
-// }

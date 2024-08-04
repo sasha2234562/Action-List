@@ -26,7 +26,7 @@ function App() {
   const isLoggedIn = useSelector(selectIsLoggedIn)
 
   const { initializeApp, logout } = useActions(authThunks)
-  console.log(isInitialized)
+
   useEffect(() => {
     if (!isInitialized) {
       initializeApp()
@@ -62,7 +62,7 @@ function App() {
       </AppBar>
       <Container fixed>
         <Routes>
-          <Route path={"action-List"} element={<TodolistsList />} />
+          <Route path={"/Action-List"} element={<TodolistsList />} />
           <Route path={"login"} element={<Login />} />
         </Routes>
       </Container>
